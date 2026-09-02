@@ -1,0 +1,80 @@
+{
+  "brand": {
+    "author": "Marian Stančík",
+    "role": "AI Architect & Lektor",
+    "email": "marian@stancik.sk",
+    "github": "https://github.com/Abra7abra7/video-course-pipeline",
+    "tagline": "Automatizovaná fabrika na AI kurzy a multi-platformový video obsah"
+  },
+  "theme": {
+    "colors": {
+      "bg_dark": "#04060a",
+      "bg_surface": "#0b0f19",
+      "bg_card": "rgba(15, 21, 35, 0.85)",
+      "primary": "#6366f1",
+      "primary_glow": "rgba(99, 102, 241, 0.45)",
+      "accent_cyan": "#06b6d4",
+      "accent_green": "#10b981",
+      "accent_amber": "#f59e0b",
+      "accent_red": "#ef4444",
+      "text_main": "#ffffff",
+      "text_sub": "#94a3b8",
+      "text_muted": "#64748b",
+      "border": "rgba(255, 255, 255, 0.08)"
+    },
+    "typography": {
+      "body_font": "Plus Jakarta Sans, sans-serif",
+      "heading_font": "Outfit, sans-serif",
+      "mono_font": "JetBrains Mono, monospace"
+    },
+    "avatar": {
+      "bubble_size_px": 150,
+      "border_width_px": 3,
+      "glow_blur_px": 10,
+      "glow_gradient": "radial-gradient(circle, #6366f1 0%, #06b6d4 60%, transparent 80%)",
+      "portrait_path": "assets/user_avatar.jpg",
+      "heygen_video": "course_grok2/assets/heygen_avatar.mp4"
+    }
+  },
+  "voice_engine": {
+    "provider": "ElevenLabs",
+    "voice_id": "4t72Xc6JKiBerVUqj6oK",
+    "speed_pct": 6,
+    "fallback_provider": "edge-tts",
+    "fallback_voice": "sk-SK-LukasNeural"
+  },
+  "export_profiles": {
+    "landscape_16x9": {
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "preset": "fast",
+      "crf": 18,
+      "target_platforms": ["YouTube", "Monitor", "Web", "LMS"]
+    },
+    "vertical_9x16": {
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "preset": "fast",
+      "crf": 18,
+      "target_platforms": ["TikTok", "Instagram Reels", "YouTube Shorts"]
+    },
+    "square_1x1": {
+      "width": 1080,
+      "height": 1080,
+      "fps": 30,
+      "preset": "fast",
+      "crf": 18,
+      "target_platforms": ["Instagram Feed", "LinkedIn Feed", "X Feed"]
+    }
+  },
+  "server": {
+    "port": 8080,
+    "host": "localhost",
+    "routes": {
+      "course_grok2": "/course_grok2/",
+      "course_grok_bot": "/course_grok_bot/"
+    }
+  }
+}
