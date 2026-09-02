@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "skills": {
+    "hyperframes-cli": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-cli/SKILL.md",
+      "computedHash": "6450049fb2843979974a84a39fa41dd7e7f22208b13692f79f5ffd245ec6526f"
+    },
+    "youtube-to-markdown": {
+      "source": "smithery.ai",
+      "sourceType": "well-known",
+      "computedHash": "0867a9c2d235c67e83123f163672cfe56a4ef16e0cbb14d43bfdbe3749f94874"
+    }
+  }
+}

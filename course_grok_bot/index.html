@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grok Bot AI Agent Tím | Interaktívny Video Kurz • Marian Stančík</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-surface: #0f1422;
+      --bg-card: rgba(18, 24, 38, 0.85);
+      --bg-card-hover: rgba(28, 37, 58, 0.95);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.5);
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.18), transparent 45%),
+                  radial-gradient(circle at 90% 85%, rgba(6, 182, 212, 0.15), transparent 45%),
+                  var(--bg-dark);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      background: rgba(7, 9, 14, 0.85);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #c7d2fe;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: #06b6d4;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #06b6d4;
+    }
+
+    .container {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1100px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .course-meta h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-top: 0.75rem;
+      background: linear-gradient(135deg, #ffffff 40%, #c7d2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .author-tag {
+      margin-top: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .author-tag span {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .progress-bar-container {
+      margin-top: 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
+      height: 100%;
+      width: 16%;
+      transition: width 0.3s ease;
+    }
+
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .lesson-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 0.85rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lesson-item:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(4px);
+    }
+
+    .lesson-item.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .lesson-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .lesson-item.active .lesson-number {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .lesson-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .lesson-item-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lesson-status {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+    }
+
+    /* Main Area */
+    .main-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Responsive 16:9 Video Canvas Screen */
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #04060b;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(99, 102, 241, 0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .video-ambient-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.25) 0%, transparent 60%),
+                  radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.18) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Video Header */
+    .video-top-bar {
+      position: relative;
+      z-index: 20;
+      padding: 1.25rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(4, 6, 11, 0.9), transparent);
+    }
+
+    .video-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .voice-speaker-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #34d399;
+    }
+
+    .audio-equalizer {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 14px;
+    }
+    .eq-bar {
+      width: 3px;
+      background: #34d399;
+      border-radius: 2px;
+      height: 4px;
+      transition: height 0.1s ease;
+    }
+
+    /* Center Scene Arena */
+    .scene-arena {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 3rem;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .scene-view {
+      position: absolute;
+      inset: 0;
+      padding: 1rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.98);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scene-view.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .scene-tag {
+      display: inline-block;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: #67e8f9;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .scene-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.6rem, 3.2vw, 2.7rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+      background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 900px;
+    }
+
+    .scene-desc {
+      font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 750px;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Scene Elements Grid */
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 0.5rem;
+    }
+
+    .scene-box {
+      background: rgba(18, 24, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.2rem 1rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .scene-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .box-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .box-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .box-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* Big Highlight Banner */
+    .stat-hero {
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.2), rgba(18, 24, 38, 0.9));
+      border: 2px solid rgba(99, 102, 241, 0.5);
+      border-radius: 1.5rem;
+      padding: 1.5rem 3rem;
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+      display: inline-block;
+    }
+
+    .stat-val {
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 900;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1;
+      text-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+    }
+
+    /* Big Play Overlay (Before user starts) */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 6, 11, 0.65);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .play-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .big-play-btn {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #4338ca);
+      border: none;
+      color: #fff;
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px var(--primary-glow);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-bottom: 1rem;
+    }
+
+    .big-play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 60px var(--primary);
+    }
+
+    /* Live Kinetic Captions Bar */
+    .kinetic-caption-container {
+      position: relative;
+      z-index: 20;
+      background: rgba(10, 14, 24, 0.85);
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+    }
+
+    /* Floating Avatar Widget in Bottom-Right */
+    .avatar-bubble-widget {
+      position: absolute;
+      bottom: 80px;
+      right: 35px;
+      z-index: 35;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .avatar-ring-glow {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+      filter: blur(8px);
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+
+    .avatar-img-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #6366f1;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      background: #000;
+    }
+
+    .avatar-img-wrapper img, .avatar-img-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .avatar-live-badge {
+      position: relative;
+      margin-top: -12px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(99, 102, 241, 0.5);
+      color: #e0e7ff;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      white-space: nowrap;
+    }
+
+    .speaking-pulse {
+      animation: avatarPulse 1.2s infinite ease-in-out alternate;
+    }
+
+    @keyframes avatarPulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.05); filter: brightness(1.15); box-shadow: 0 0 25px rgba(99, 102, 241, 0.8); }
+    }
+
+    .caption-pill {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      padding: 0.35rem 1.2rem;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    /* Bottom Player Controls */
+    .player-controls-bar {
+      position: relative;
+      z-index: 20;
+      background: rgba(7, 9, 14, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+
+    .control-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .control-btn-play {
+      background: var(--primary);
+      border-color: var(--primary);
+      width: 46px;
+      height: 46px;
+      font-size: 1.2rem;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .time-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      min-width: 90px;
+    }
+
+    .scrubber-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .scrubber-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
+      border-radius: 3px;
+    }
+
+    .speed-select-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .speed-select-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* Transcript Box */
+    .transcript-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .transcript-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .transcript-content {
+      line-height: 1.8;
+      font-size: 1.02rem;
+      color: #e2e8f0;
+      white-space: pre-line;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.95rem;
+      border-radius: 0.6rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-action:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div class="badge-header">
+        <span class="pulse-dot"></span>
+        Grok Bot AI Agent Tím
+      </div>
+      <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">Interaktívny Video Kurz</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <a href="KURZ_GROK_BOT.md" target="_blank" class="btn-action">📖 Markdown Skript</a>
+      <a href="audio/full_course_grok_bot.mp3" download class="btn-action" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399;">🎧 Celý kurz (1 MP3)</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="card course-meta">
+        <div class="badge-header">6 Lekcií • ~30 minút</div>
+        <h1>Ako postaviť AI agent tím s Grok Bot</h1>
+        <div class="author-tag">
+          Lektor: <span>Marian Stančík</span>
+        </div>
+        
+        <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted);">
+          <span>Postup kurzu</span>
+          <span id="progress-text">1 / 6 lekcií</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="lesson-list" id="lesson-list">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Section -->
+    <main class="main-section">
+
+      <!-- Action Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-weight: 800; font-size: 1.2rem;" id="header-lesson-title">Lekcia 1: Čo je Grok Bot</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn-action" onclick="toggleFullscreen()">⛶ Celá obrazovka</button>
+          <a id="btn-download-mp3" href="#" download class="btn-action">⬇ Stiahnuť lekciu MP3</a>
+        </div>
+      </div>
+
+      <!-- ANIMATED 16:9 VIDEO VIEWPORT -->
+      <div class="video-viewport" id="video-viewport">
+        <div class="grid-lines"></div>
+        <div class="video-ambient-glow"></div>
+
+        <!-- Big Play Click Overlay -->
+        <div class="play-overlay" id="play-overlay" onclick="togglePlay()">
+          <button class="big-play-btn" id="big-play-btn">▶</button>
+          <div style="font-size: 1.3rem; font-weight: 800; color: #fff;">Klikni a spusti video lekciu</div>
+          <div style="font-size: 0.95rem; color: var(--text-muted); margin-top: 6px;">Hlasový výklad: Marian Stančík (ElevenLabs)</div>
+        </div>
+
+        <!-- Top Bar inside Video -->
+        <div class="video-top-bar">
+          <div class="video-badge" id="video-lesson-badge">
+            <span class="pulse-dot"></span>
+            Lekcia 1 z 6
+          </div>
+
+          <div class="voice-speaker-badge">
+            <div class="audio-equalizer" id="equalizer">
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+            </div>
+            <span>Marian Stančík • ElevenLabs Voice</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Scene Arena -->
+        <div class="scene-arena" id="scene-arena">
+          <!-- Scenes injected dynamically via JS -->
+        </div>
+
+        <!-- Floating Avatar Widget in Bottom-Right -->
+        <div class="avatar-bubble-widget" id="avatar-bubble">
+          <div class="avatar-ring-glow"></div>
+          <div class="avatar-img-wrapper" id="avatar-wrapper" style="width: 145px; height: 145px; border: 3.5px solid #6366f1; box-shadow: 0 10px 35px rgba(0,0,0,0.9), 0 0 25px rgba(99,102,241,0.5);">
+            <video id="avatar-video" src="assets/heygen_avatar.mp4" poster="assets/heygen_avatar.jpg" loop playsinline muted style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%;"></video>
+          </div>
+          <div class="avatar-live-badge">
+            <span class="pulse-dot" style="width: 7px; height: 7px; background: #34d399; box-shadow: 0 0 8px #34d399;"></span> Marian Stančík • AI Twin
+          </div>
+        </div>
+
+        <!-- Live Subtitles Banner -->
+        <div class="kinetic-caption-container">
+          <div class="caption-pill" id="kinetic-caption">
+            Grok Bot: Autonómny tím AI agentov
+          </div>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="player-controls-bar">
+          <button class="control-btn" onclick="prevLesson()" title="Predchádzajúca lekcia">⏮</button>
+          <button class="control-btn" onclick="seekRelative(-10)" title="Dozadu 10s">↺ 10</button>
+          <button class="control-btn control-btn-play" id="btn-play-toggle" onclick="togglePlay()">▶</button>
+          <button class="control-btn" onclick="seekRelative(10)" title="Dopredu 10s">10 ↻</button>
+          <button class="control-btn" onclick="nextLesson()" title="Ďalšia lekcia">⏭</button>
+
+          <span class="time-label" id="time-code">0:00 / 0:00</span>
+
+          <div class="scrubber-track" id="scrubber-track" onclick="handleScrub(event)">
+            <div class="scrubber-fill" id="scrubber-fill"></div>
+          </div>
+
+          <button class="speed-select-btn" id="speed-btn" onclick="cycleSpeed()">1.0x</button>
+        </div>
+
+        <audio id="audio-engine" preload="auto"></audio>
+      </div>
+
+      <!-- Transcript Card -->
+      <div class="transcript-card">
+        <div class="transcript-header">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase;">Študijný prepis</div>
+            <h2 style="font-size: 1.25rem; font-weight: 800;" id="transcript-title">Čo je Grok Bot a prečo je to zlom</h2>
+          </div>
+          <button class="btn-action" id="btn-copy-text" onclick="copyTranscript()">📋 Kopírovať text</button>
+        </div>
+        <div class="transcript-content" id="transcript-text">
+          <!-- Text rendered via JS -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    const LESSONS = [
+      {
+        id: 1,
+        title: "Čo je Grok Bot a prečo je to zlom",
+        audioSrc: "audio/lekcia_01_co_je_grok_bot.mp3",
+        duration: 50.4,
+        scenes: [
+          {
+            start: 0,
+            end: 13,
+            tag: "Úvod kurzu",
+            title: "Čo je Grok Bot?",
+            desc: "Virálny workshop SpaceX AI inžinierky Lauren Tan, ktorý obletel celý svet.",
+            caption: "Vitaj v kurze o Grok Bote. Som Marian Stančík...",
+            boxes: [
+              { icon: "🚀", title: "Lauren Tan", desc: "SpaceX AI Inžinierka" },
+              { icon: "⚡", title: "Grok Bot", desc: "Autonómny agent tím" },
+              { icon: "🎯", title: "Marian Stančík", desc: "Lektor & autor kurzu" }
+            ]
+          },
+          {
+            start: 13,
+            end: 28,
+            tag: "Zmena paradigmy",
+            title: "Chatbot vs. Skutočný Agent Tím",
+            desc: "Agenti majú vlastný počítač v cloude a pracujú nonstop v tvojich nástrojoch.",
+            caption: "Nie je to chatbot, ktorému píšeš otázky. Je to tím agentov...",
+            boxes: [
+              { icon: "❌", title: "Bežný Chatbot", desc: "Len pasívne čaká na otázku a vráti text" },
+              { icon: "💻", title: "Cloud Computer", desc: "Vlastný počítač v cloude s Gmailom, Slackom a GitHubom" },
+              { icon: "⏱️", title: "Non-stop 24/7", desc: "Zatvoríš laptop a agenti stále pracujú" }
+            ]
+          },
+          {
+            start: 28,
+            end: 41,
+            tag: "Výsledok z praxe",
+            title: "90% Automatizácia Rutiny",
+            desc: "Lauren Tan ovláda 10 až 20 agentov cez jediného Chief of Staff.",
+            caption: "Lauren Tan automatizuje 90 percent svojej dennej rutiny...",
+            heroStat: { val: "90%", label: "Denná rutina zautomatizovaná" }
+          },
+          {
+            start: 41,
+            end: 51,
+            tag: "Pokračovanie",
+            title: "Ako si to postavíš aj ty",
+            desc: "V ďalšej lekcii sa pozrieme na architektúru Chief of Staff a špecialistov.",
+            caption: "Poďme sa pozrieť, čo to v praxi znamená a ako si to postaviť...",
+            boxes: [
+              { icon: "1️⃣", title: "Architektúra", desc: "Chief of Staff & špecialisti" },
+              { icon: "2️⃣", title: "Nástroje", desc: "Pripojenie Gmail & Kalendár" },
+              { icon: "3️⃣", title: "Teach a Task", desc: "Učenie rutín bez kódovania" }
+            ]
+          }
+        ],
+        text: `Vitaj v kurze o Grok Bote. Som Marian Stančík a v tomto kurze ti ukážem, čo sa skrýva za virálnym workshopom SpaceX AI inžinierky Lauren Tan, ktorý obletel celé X.
+
+Grok Bot je niečo, čo tu ešte nebolo. Nie je to chatbot, ktorému píšeš otázky a on ti vráti text. Je to tím AI agentov, ktorí majú vlastný počítač v cloude. Každý z nich sa vie prihlásiť do tvojich nástrojov — do Gmailu, kalendára, Slacku, GitHubu — a pracovať v nich presne ako ty. Rozdiel je v tom, že oni nezaspávajú. Nepotrebujú pauzu. A keď zatvoríš laptop, oni stále pracujú.
+
+Lauren Tan, inžinierka ktorá na Grok Bote priamo pracuje, vo svojom workshope ukázala ako behá 10 až 20 týchto agentov. A všetkých ovláda cez jediného Chief of Staff agenta. Jej tvrdenie? Automatizuje 90 percent svojej dennej rutiny.
+
+Poďme sa pozrieť na to, čo to v praxi znamená a ako si to môžeš postaviť aj ty.`
+      },
+      {
+        id: 2,
+        title: "Architektúra — Chief of Staff a špecialisti",
+        audioSrc: "audio/lekcia_02_architektura.mp3",
+        duration: 56.2,
+        scenes: [
+          {
+            start: 0,
+            end: 15,
+            tag: "Základný princíp",
+            title: "1 Orchestrátor: Chief of Staff",
+            desc: "Nekomunikuješ so všetkými botmi naraz. Hovoríš len s jedným hlavným asistentom.",
+            caption: "Celý systém stojí na jednom princípe: komunikuješ len s Chief of Staff...",
+            boxes: [
+              { icon: "👑", title: "Chief of Staff", desc: "Pozná všetkých odborníkov vo firme" },
+              { icon: "🗣️", title: "Jediný vstup", desc: "Zadáš zadanie a nestaráš sa o detaily" },
+              { icon: "⚡", title: "Autonómia", desc: "Sám rozdelí prácu špecialistom" }
+            ]
+          },
+          {
+            start: 15,
+            end: 32,
+            tag: "Praktický príklad",
+            title: "Delegovanie Cenovej Ponuky",
+            desc: "Príklad z praxe: 'Priprav ponuku pre klienta' rozdelí medzi 3 botov.",
+            caption: "On už vie, ktorý bot spracuje kalkuláciu, text a kto pošle email...",
+            boxes: [
+              { icon: "1️⃣", title: "Kalkulácia", desc: "Špecialista spočíta ceny" },
+              { icon: "2️⃣", title: "Copywriting", desc: "Content bot napíše text" },
+              { icon: "3️⃣", title: "Odoslanie", desc: "Inbox bot pripraví draft" }
+            ]
+          },
+          {
+            start: 32,
+            end: 45,
+            tag: "Tím špecialistov",
+            title: "5 Trvalých Rolí v Tíme",
+            desc: "Každý špecialista má vlastnú doménu, pamäť a autonómne sa zlepšuje.",
+            caption: "Inbox Manager, Calendar Scheduler, To-Do, Research a Content bot...",
+            boxes: [
+              { icon: "📬", title: "Inbox", desc: "Správa pošty" },
+              { icon: "📅", title: "Kalendár", desc: "Plánovanie" },
+              { icon: "✅", title: "To-Do", desc: "Sledovanie úloh" },
+              { icon: "🔍", title: "Research", desc: "Prieskum trhu" },
+              { icon: "✍️", title: "Content", desc: "Tvorba obsahu" }
+            ]
+          },
+          {
+            start: 45,
+            end: 57,
+            tag: "Kľúčový insight",
+            title: "Tím špecialistov > Super-agent",
+            desc: "Nejde o 1 agenta čo vie všetko. Ide o tím expertov riadených orchestrátorom.",
+            caption: "Toto je kľúčový insight: koordinovaný tím špecialistov...",
+            heroStat: { val: "10x", label: "Vyššia efektivita vďaka špecializácii" }
+          }
+        ],
+        text: `Celý systém stojí na jednom jednoduchom princípe: nekomunikuješ so všetkými botmi. Komunikuješ len s jedným — s Chief of Staff.
+
+Predstav si ho ako svojho osobného asistenta, ktorý pozná všetkých odborníkov v tvojej firme. Ty mu povieš: "Potrebujem pripraviť ponuku pre klienta." A on už vie, ktorý bot spracuje cenovú kalkuláciu, ktorý pripraví text ponuky a ktorý pošle email. Ty to nemusíš riešiť.
+
+Pod Chief of Staff sedia špecialisti s trvalými rolami:
+• Inbox Manager — spravuje tvoju poštu
+• Calendar Scheduler — plánuje stretnutia
+• To-Do Organizer — sleduje úlohy
+• Research bot — robí prieskum trhu
+• Content bot — pripravuje obsah
+
+Každý z nich má svoju doménu, dlhodobú pamäť a zlepšuje sa v nej. A vedia medzi sebou komunikovať priamo, bez toho aby museli ísť cez Chief of Staff.
+
+Toto je kľúčový insight: nejde o to mať jeden super-agent, ktorý vie všetko. Ide o to mať tím špecialistov, ktorých koordinuje jeden orchestrátor.`
+      },
+      {
+        id: 3,
+        title: "Ako začať — prvý bot a pripojenie nástrojov",
+        audioSrc: "audio/lekcia_03_ako_zacat.mp3",
+        duration: 65.3,
+        scenes: [
+          {
+            start: 0,
+            end: 15,
+            tag: "Krok 1",
+            title: "Stiahnutie aplikácie",
+            desc: "Grok Bot je dostupný pre macOS a iOS (Android zatiaľ nepodporovaný).",
+            caption: "Prvý krok je stiahnuť Grok Bot appku na macOS alebo iOS...",
+            boxes: [
+              { icon: "💻", title: "macOS App", desc: "Hlavné odporúčané prostredie" },
+              { icon: "📱", title: "iOS App", desc: "Mobilný prístup na cestách" },
+              { icon: "⏳", title: "Android", desc: "Zatiaľ nie je podporovaný" }
+            ]
+          },
+          {
+            start: 15,
+            end: 28,
+            tag: "Krok 2",
+            title: "Vytvorenie Chief of Staff",
+            desc: "Prvý bot musí mať rolu Chief of Staff. Je to kľúčové rozhodnutie.",
+            caption: "Keď appku otvoríš, vytvoríš prvého bota a daj mu rolu Chief of Staff...",
+            boxes: [
+              { icon: "🎯", title: "Nepremýšľaj zložito", desc: "Zadaj len rolu Chief of Staff" },
+              { icon: "🔑", title: "Základný pilier", desc: "Bude riadiť všetkých budúcich botov" }
+            ]
+          },
+          {
+            start: 28,
+            end: 45,
+            tag: "Krok 3",
+            title: "Pripojenie nástrojov (Auth)",
+            desc: "Stačí jednorazové prihlásenie a prístup získajú všetci boti.",
+            caption: "Gmail, Google Calendar, Slack — to sú prvé tri nástroje...",
+            boxes: [
+              { icon: "✉️", title: "Gmail", desc: "Triedenie a koncepty správ" },
+              { icon: "📅", title: "Google Calendar", desc: "Manažment stretnutí" },
+              { icon: "💬", title: "Slack", desc: "Tímová komunikácia" }
+            ]
+          },
+          {
+            start: 45,
+            end: 66,
+            tag: "Krok 4 — Kľúčový moment",
+            title: "Daj Chief of Staff voľnosť",
+            desc: "Povedz mu: 'Tu sú moje nástroje a moja práca. Navrhni mi tím.'",
+            caption: "Povedz mu: Tu sú moje nástroje, navrhni mi tím. Ty len schváliš a on ho postaví...",
+            heroStat: { val: "1-Klik", label: "Schválenie a postavenie celého tímu botom" }
+          }
+        ],
+        text: `Poďme na praktickú časť. Ako si to celé nastavíš?
+
+Prvý krok je stiahnuť Grok Bot appku na macOS alebo iOS. Android zatiaľ nie je podporovaný.
+
+Keď appku otvoríš, vytvoríš svojho prvého bota. Nepremýšľaj nad tým príliš — daj mu rolu Chief of Staff. To je tá najdôležitejšia voľba, ktorú spravíš.
+
+Potom ho požiadaj, aby ťa previedol pripojením tvojich nástrojov. Gmail, Google Calendar, Slack — to sú prvé tri, ktoré odporúčam. Grok Bot ťa prevedie autentifikáciou. Stačí raz, a všetci tvoji budúci boti budú mať prístup k týmto nástrojom automaticky.
+
+Dôležitá rada: nepripájaj hneď všetko. Začni s emailom a kalendárom. Nechaj bota ukázať čo vie, a až potom pridávaj ďalšie integrácie.
+
+Keď máš Chief of Staff hotového a nástroje pripojené, sprav to najdôležitejšie — daj mu voľnosť. Povedz mu: "Tu sú moje nástroje, tu je moja práca. Navrhni mi tím, ktorý by mi pomohol." On ti navrhne zloženie tímu, ty schváliš a on ho postaví.
+
+Toto je moment, ktorý väčšina ľudí preskočí. A potom sa čudujú, prečo im to nefunguje.`
+      },
+      {
+        id: 4,
+        title: "Učenie skillov a rutiny",
+        audioSrc: "audio/lekcia_04_ucenie_skillov.mp3",
+        duration: 73.2,
+        scenes: [
+          {
+            start: 0,
+            end: 18,
+            tag: "Funkcia: Teach a Task",
+            title: "Učenie nahrávaním obrazovky",
+            desc: "Žiadne zložité písanie promptov. Proste ukážeš botovi ako spraviť úlohu.",
+            caption: "Namiesto písania promptov proste zapneš nahrávanie a ukážeš úlohu...",
+            boxes: [
+              { icon: "🔴", title: "1. Spusť nahrávanie", desc: "Klikni na Teach a Task" },
+              { icon: "🖱️", title: "2. Urob úlohu ručne", desc: "Napríklad spracuj faktúru" },
+              { icon: "🧠", title: "3. Uloženie skillu", desc: "Bot si postup zapamätá navždy" }
+            ]
+          },
+          {
+            start: 18,
+            end: 35,
+            tag: "Učenie preferencií",
+            title: "Bot sa prispôsobí tvojmu štýlu",
+            desc: "Zapamätá si tvoje opravy a preferencie a nabudúce ich spraví správne.",
+            caption: "Keď mu povieš: faktúry radšej spracúvam večer, zapamätá si to...",
+            boxes: [
+              { icon: "🌙", title: "Časovanie", desc: "Faktúry večer namiesto rána" },
+              { icon: "📊", title: "Formát", desc: "Presné zarovnanie a štruktúra dát" },
+              { icon: "✍️", title: "Tón", desc: "Osobný štýl písania správ" }
+            ]
+          },
+          {
+            start: 35,
+            end: 55,
+            tag: "Cloud Rutiny",
+            title: "Automatizácia na pozadí",
+            desc: "Rutiny bežia v cloude na základe času alebo triggerov aj keď spíš.",
+            caption: "Rutiny bežia na cloude. Zatvoríš laptop, ideš spať a ráno máš hotovo...",
+            boxes: [
+              { icon: "☀️", title: "08:00 Ráno", desc: "Sumár dôležitých emailov" },
+              { icon: "💶", title: "Faktúra > 1000€", desc: "Označiť na schválenie" },
+              { icon: "📈", title: "Pondelok 09:00", desc: "Týždenný stav projektov" }
+            ]
+          },
+          {
+            start: 55,
+            end: 74,
+            tag: "Feedback Loop z xAI",
+            title: "Autonómna oprava bugov",
+            desc: "Boti sami začnú riešiť nahlásený bug skôr, než si človek prečíta ticket.",
+            caption: "To nie je obyčajná automatizácia. To je skutočný digitálny zamestnanec...",
+            heroStat: { val: "Loop", label: "Autonómny učiaci a opravný cyklus" }
+          }
+        ],
+        text: `Toto je podľa mňa najsilnejšia časť Grok Botu. Nazýva sa to Teach a Task.
+
+Namiesto písania zložitých promptov proste ukážeš botovi čo má robiť. Spustíš nahrávanie obrazovky, urobíš úlohu — napríklad spracovanie príchodzej faktúry — a bot sa to naučí. Uloží si to ako skill a nabudúce to spraví sám.
+
+Ale pozor, nie je to len o automatizácii. Je to o tom, že bot sa učí tvoje preferencie. Keď mu povieš "faktúry radšej spracúvam večer, nie ráno", zapamätá si to. Keď opravíš nejaký detail, nabudúce ho spraví správne.
+
+Z týchto skillov potom vytváraš rutiny. Rutina je automatizácia, ktorá beží na základe času alebo udalosti. Napríklad:
+• Každé ráno o 8:00 mi priprav sumár emailov
+• Keď príde faktúra nad 1000€, označ ju na schválenie
+• Každý pondelok o 9:00 pošli report o stave projektov
+
+Rutiny bežia na cloude. Nepotrebuješ mať appku otvorenú. Zatvoríš laptop, ideš spať a ráno máš hotovo.
+
+Najsilnejší príklad z workshopu: Lauren ukázala feedback loop. Keď jej tím nahlási bug na Grok Bote, jej boti ho automaticky začnú fixovať ešte skôr, než si stihne prečítať ticket. To nie je automatizácia. To je zamestnanec.`
+      },
+      {
+        id: 5,
+        title: "Guardrails a bezpečnosť",
+        audioSrc: "audio/lekcia_05_guardrails.mp3",
+        duration: 60.6,
+        scenes: [
+          {
+            start: 0,
+            end: 18,
+            tag: "Základné pravidlo",
+            title: "Agent = Nový zamestnanec",
+            desc: "Dať botovi prístup k emailom bez pravidiel je obrovské riziko.",
+            caption: "Dať botovi prístup k emailu je ako najať zamestnanca. Potrebuje pravidlá...",
+            boxes: [
+              { icon: "🛡️", title: "Bezpečnosť", desc: "Základ stability celého systému" },
+              { icon: "⚖️", title: "Jasné hranice", desc: "Presné mantinely pre každého bota" }
+            ]
+          },
+          {
+            start: 18,
+            end: 35,
+            tag: "3 Zóny",
+            title: "Nastavenie Hraníc",
+            desc: "Definuj oprávnenia v 3 farebných zónach.",
+            caption: "Čo smie bez pýtania? Na čo potrebuje schválenie? Čo nesmie nikdy?...",
+            boxes: [
+              { icon: "🟢", title: "Zelená zóna", desc: "Čo smie robiť bez pýtania" },
+              { icon: "🟡", title: "Oranžová zóna", desc: "Na čo potrebuje tvoje schválenie" },
+              { icon: "🔴", title: "Červená zóna", desc: "Čo nesmie urobiť NIKDY" }
+            ]
+          },
+          {
+            start: 35,
+            end: 48,
+            tag: "Human-in-the-Loop",
+            title: "Tlačidlo 'SEND' máš len ty",
+            desc: "Boti pripravia drafty a ponuky, ale finálne odoslanie kontroluješ ty.",
+            caption: "Boti vedia písať emaily, ale tlačidlo SEND máš len ty...",
+            heroStat: { val: "SEND", label: "Tlačidlo odoslania má výhradne človek" }
+          },
+          {
+            start: 48,
+            end: 61,
+            tag: "Návyk",
+            title: "Bezpečnosť je trvalý návyk",
+            desc: "Zdieľaný cloud počítač vyžaduje zodpovednú správu prístupov.",
+            caption: "Bezpečnosť nie je nastavenie, je to návyk...",
+            boxes: [
+              { icon: "🔒", title: "Minimálne heslá", desc: "Nedávaj nepotrebné prístupy" },
+              { icon: "👁️", title: "Kontrola", desc: "Pravidelne kontroluj denník" },
+              { icon: "🛑", title: "Okamžitý stop", desc: "Pri podozrení proces zastav" }
+            ]
+          }
+        ],
+        text: `Toto je najdôležitejšia lekcia v celom kurze. Lebo dať botovi prístup k tvojmu emailu je ako najať zamestnanca. A zamestnanec potrebuje pravidlá.
+
+Každý bot v tvojom tíme by mal mať jasne nastavené hranice:
+• Čo smie robiť bez pýtania?
+• Na čo potrebuje schválenie?
+• Čo nesmie robiť nikdy?
+
+Príklad z praxe: boti vedia písať emaily, ale nič neodošle bez tvojho schválenia. Môžu draftovať odpovede, môžu pripravovať ponuky, ale tlačidlo send máš len ty.
+
+Toto nie je obmedzenie. Je to nevyhnutnosť. Bot, ktorý sa musí pýtať na všetko, je nepoužiteľný. Ale bot, ktorý sa nepýta nikdy, je nebezpečný.
+
+Druhá vec — cloud computer je zdieľaný. Všetci tvoji boti sídlia na jednom počítači. To znamená, že ak jeden bot získa prístup k nejakému heslu, majú ho všetci. Preto:
+• Nikdy nedávaj botovi prístup k veciam, ktoré nepotrebuje
+• Pravidelne kontroluj čo boti robia
+• Ak niečo vyzerá podozrivo, okamžite to zastav
+
+Bezpečnosť nie je nastavenie, je to návyk.`
+      },
+      {
+        id: 6,
+        title: "Ako to celé spojiť a čo ďalej",
+        audioSrc: "audio/lekcia_06_ako_to_spojit.mp3",
+        duration: 75.6,
+        scenes: [
+          {
+            start: 0,
+            end: 35,
+            tag: "Kompletný postup",
+            title: "9 Krokov k AI Tímu",
+            desc: "Prehľadná osnova nasadenia od inštalácie po škálovanie.",
+            caption: "Poďme si zhrnúť celý 9-krokový postup...",
+            boxes: [
+              { icon: "1", title: "Stiahni appku", desc: "macOS / iOS" },
+              { icon: "2", title: "Chief of Staff", desc: "Vytvor orchestrátora" },
+              { icon: "3", title: "Pripoj nástroje", desc: "Gmail & Kalendár" },
+              { icon: "4", title: "Teach a Task", desc: "Nauč prvý skill" },
+              { icon: "5", title: "Rutiny & Škála", desc: "Cloud automatizácia" }
+            ]
+          },
+          {
+            start: 35,
+            end: 55,
+            tag: "Zlaté pravidlo",
+            title: "Začni s 1 kvalitným botom",
+            desc: "Nenastavuj 6 priemerných agentov. Začni jedným čo funguje na 100%.",
+            caption: "Každý setup, ktorý zlyhal, zlyhal na tom, že postavil 6 priemerných agentov...",
+            heroStat: { val: "1 BOT", label: "Najprv 1 dokonalý bot, až potom tím" }
+          },
+          {
+            start: 55,
+            end: 76,
+            tag: "Záver kurzu",
+            title: "Posun v roku 2026",
+            desc: "Nie 'aký prompt napíšem', ale 'akého človeka najmem'.",
+            caption: "Ďakujem za pozornosť! Otázky píš na marianstancik@agentmail.to...",
+            boxes: [
+              { icon: "🎓", title: "Autor", desc: "Marian Stančík" },
+              { icon: "✉️", title: "Otázky & Kontakt", desc: "marianstancik@agentmail.to" }
+            ]
+          }
+        ],
+        text: `Poďme si zhrnúť celý postup, ktorý potrebuješ na to, aby si mal vlastný tím AI agentov.
+
+Krok 1: Stiahni Grok Bot appku na macOS
+Krok 2: Vytvor Chief of Staff bota
+Krok 3: Pripoj Gmail a kalendár
+Krok 4: Nechaj Chief of Staff navrhnúť tím
+Krok 5: Schváľ a nechaj ho postaviť špecialistov
+Krok 6: Nastav guardrails — čo smie každý bot bez pýtania
+Krok 7: Nauč prvý skill cez Teach a Task
+Krok 8: Vytvor rutinu na základe skillu
+Krok 9: Testuj, opravuj, rozširuj
+
+A teraz najdôležitejšia rada: nezačínaj s tímom. Začni s jedným botom, ktorý robí jednu vec dobre. Každý multi-agent setup, ktorý zlyhal, zlyhal pretože niekto postavil šesť priemerných agentov namiesto jedného dobrého.
+
+Tvoja prvá otázka pre Chief of Staff by mala byť: "Akého jedného bota by si mi odporučil na začiatok?" A až keď ten funguje, rozširuj.
+
+Grok Bot nie je nástroj. Je to nový spôsob ako uvažovať o práci. Nie "aký prompt napíšem", ale "akého človeka najmem". A to je posun, ktorý definuje rok 2026.
+
+Ak máš otázky, napíš mi na marianstancik@agentmail.to.
+
+Ďakujem za pozornosť.`
+      }
+    ];
+
+    let currentLessonIdx = 0;
+    let currentSceneIdx = -1;
+    const audio = document.getElementById('audio-engine');
+    const playOverlay = document.getElementById('play-overlay');
+    const btnPlayToggle = document.getElementById('btn-play-toggle');
+    const timeCodeEl = document.getElementById('time-code');
+    const scrubberFill = document.getElementById('scrubber-fill');
+    const scrubberTrack = document.getElementById('scrubber-track');
+    const kineticCaption = document.getElementById('kinetic-caption');
+    const sceneArena = document.getElementById('scene-arena');
+    const speedBtn = document.getElementById('speed-btn');
+    const eqBars = document.querySelectorAll('.eq-bar');
+
+    const speeds = [1.0, 1.25, 1.5, 2.0];
+    let speedIdx = 0;
+
+    function formatTime(s) {
+      if (isNaN(s)) return "0:00";
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    function renderLessonList() {
+      const listEl = document.getElementById('lesson-list');
+      listEl.innerHTML = '';
+      LESSONS.forEach((l, idx) => {
+        const item = document.createElement('div');
+        item.className = `lesson-item ${idx === currentLessonIdx ? 'active' : ''}`;
+        item.innerHTML = `
+          <div class="lesson-number">${l.id}</div>
+          <div class="lesson-info">
+            <div class="lesson-item-title">${l.title}</div>
+            <div class="lesson-status">Lekcia ${l.id} • ${Math.ceil(l.duration)}s</div>
+          </div>
+        `;
+        item.onclick = () => selectLesson(idx, true);
+        listEl.appendChild(item);
+      });
+      document.getElementById('progress-fill').style.width = `${((currentLessonIdx + 1) / LESSONS.length) * 100}%`;
+      document.getElementById('progress-text').innerText = `${currentLessonIdx + 1} / ${LESSONS.length} lekcií`;
+    }
+
+    function buildSceneElements(lesson) {
+      sceneArena.innerHTML = '';
+      lesson.scenes.forEach((sc, i) => {
+        const el = document.createElement('div');
+        el.className = 'scene-view';
+        el.id = `scene-view-${i}`;
+
+        let boxesHtml = '';
+        if (sc.boxes && sc.boxes.length > 0) {
+          boxesHtml = `<div class="scene-grid">${sc.boxes.map(b => `
+            <div class="scene-box">
+              <div class="box-icon">${b.icon}</div>
+              <div class="box-title">${b.title}</div>
+              <div class="box-desc">${b.desc}</div>
+            </div>
+          `).join('')}</div>`;
+        }
+
+        let statHtml = '';
+        if (sc.heroStat) {
+          statHtml = `
+            <div class="stat-hero">
+              <div class="stat-val">${sc.heroStat.val}</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-top: 6px;">${sc.heroStat.label}</div>
+            </div>
+          `;
+        }
+
+        el.innerHTML = `
+          <div class="scene-tag">${sc.tag}</div>
+          <h2 class="scene-title">${sc.title}</h2>
+          <p class="scene-desc">${sc.desc}</p>
+          ${statHtml}
+          ${boxesHtml}
+        `;
+        sceneArena.appendChild(el);
+      });
+    }
+
+    function selectLesson(idx, autoStart = false) {
+      currentLessonIdx = idx;
+      currentSceneIdx = -1;
+      const lesson = LESSONS[idx];
+
+      document.getElementById('header-lesson-title').innerText = `Lekcia ${lesson.id}: ${lesson.title}`;
+      document.getElementById('video-lesson-badge').innerText = `Lekcia ${lesson.id} z ${LESSONS.length}`;
+      document.getElementById('transcript-title').innerText = lesson.title;
+      document.getElementById('transcript-text').innerText = lesson.text;
+      document.getElementById('btn-download-mp3').href = lesson.audioSrc;
+      document.getElementById('btn-download-mp3').download = lesson.audioSrc.split('/').pop();
+
+      buildSceneElements(lesson);
+      renderLessonList();
+
+      audio.src = lesson.audioSrc;
+      audio.load();
+
+      if (autoStart) {
+        playOverlay.classList.add('hidden');
+        audio.play().then(() => {
+          btnPlayToggle.innerText = '⏸';
+        }).catch(e => console.log('Playback blocked', e));
+      } else {
+        playOverlay.classList.remove('hidden');
+        btnPlayToggle.innerText = '▶';
+      }
+      updateAvatarMedia(lesson.id);
+      updateSceneDisplay(0);
+    }
+
+    function updateSceneDisplay(currentTime) {
+      const lesson = LESSONS[currentLessonIdx];
+      let activeIdx = 0;
+      for (let i = 0; i < lesson.scenes.length; i++) {
+        if (currentTime >= lesson.scenes[i].start && currentTime < lesson.scenes[i].end) {
+          activeIdx = i;
+          break;
+        }
+      }
+
+      if (activeIdx !== currentSceneIdx) {
+        currentSceneIdx = activeIdx;
+        const scene = lesson.scenes[activeIdx];
+        kineticCaption.innerText = scene.caption;
+
+        document.querySelectorAll('.scene-view').forEach((el, i) => {
+          if (i === activeIdx) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    function updateAvatarMedia(lessonId) {
+      const avatarVid = document.getElementById('avatar-video');
+      if (avatarVid) {
+        avatarVid.src = 'assets/heygen_avatar.mp4';
+        avatarVid.poster = 'assets/heygen_avatar.jpg';
+        avatarVid.style.display = 'block';
+      }
+    }
+
+    // Audio Events
+    audio.ontimeupdate = () => {
+      const cur = audio.currentTime;
+      const dur = audio.duration || LESSONS[currentLessonIdx].duration;
+      timeCodeEl.innerText = `${formatTime(cur)} / ${formatTime(dur)}`;
+      scrubberFill.style.width = `${(cur / dur) * 100}%`;
+      updateSceneDisplay(cur);
+
+      const avatarVid = document.getElementById('avatar-video');
+      if (avatarVid && avatarVid.style.display === 'block') {
+        if (Math.abs(avatarVid.currentTime - cur) > 0.3) {
+          avatarVid.currentTime = cur;
+        }
+      }
+
+      // Animate Equalizer bars
+      if (!audio.paused) {
+        eqBars.forEach((bar, i) => {
+          const h = 4 + Math.sin(Date.now() / 150 + i) * 8 + Math.random() * 4;
+          bar.style.height = `${Math.max(3, h)}px`;
+        });
+      }
+    };
+
+    audio.onended = () => {
+      document.getElementById('avatar-wrapper').classList.remove('speaking-pulse');
+      const avatarVid = document.getElementById('avatar-video');
+      if (avatarVid) avatarVid.pause();
+
+      if (currentLessonIdx < LESSONS.length - 1) {
+        selectLesson(currentLessonIdx + 1, true);
+      } else {
+        btnPlayToggle.innerText = '▶';
+        playOverlay.classList.remove('hidden');
+      }
+    };
+
+    function togglePlay() {
+      const avatarWrap = document.getElementById('avatar-wrapper');
+      const avatarVid = document.getElementById('avatar-video');
+      if (audio.paused) {
+        audio.play().then(() => {
+          btnPlayToggle.innerText = '⏸';
+          playOverlay.classList.add('hidden');
+          avatarWrap.classList.add('speaking-pulse');
+          if (avatarVid && avatarVid.style.display === 'block') avatarVid.play().catch(e=>console.log(e));
+        }).catch(e => console.error(e));
+      } else {
+        audio.pause();
+        btnPlayToggle.innerText = '▶';
+        playOverlay.classList.remove('hidden');
+        avatarWrap.classList.remove('speaking-pulse');
+        if (avatarVid && avatarVid.style.display === 'block') avatarVid.pause();
+      }
+    }
+
+    function handleScrub(e) {
+      const rect = scrubberTrack.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = pct * (audio.duration || LESSONS[currentLessonIdx].duration);
+    }
+
+    function seekRelative(delta) {
+      audio.currentTime = Math.max(0, Math.min(audio.duration || 100, audio.currentTime + delta));
+    }
+
+    function prevLesson() {
+      if (currentLessonIdx > 0) selectLesson(currentLessonIdx - 1, true);
+    }
+
+    function nextLesson() {
+      if (currentLessonIdx < LESSONS.length - 1) selectLesson(currentLessonIdx + 1, true);
+    }
+
+    function cycleSpeed() {
+      speedIdx = (speedIdx + 1) % speeds.length;
+      const s = speeds[speedIdx];
+      audio.playbackRate = s;
+      speedBtn.innerText = `${s.toFixed(2).replace('.00', '.0')}x`;
+    }
+
+    function toggleFullscreen() {
+      const elem = document.getElementById('video-viewport');
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => alert(`Chyba celej obrazovky: ${err.message}`));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function copyTranscript() {
+      navigator.clipboard.writeText(LESSONS[currentLessonIdx].text);
+      const btn = document.getElementById('btn-copy-text');
+      btn.innerText = '✅ Skopírované!';
+      setTimeout(() => btn.innerText = '📋 Kopírovať text', 2000);
+    }
+
+    // Init first lesson
+    selectLesson(0, false);
+  </script>
+</body>
+</html>

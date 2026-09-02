@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="sk" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #050811;
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+      }
+
+      .canvas {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: radial-gradient(
+            circle at 50% 10%,
+            rgba(56, 189, 248, 0.28) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at 80% 85%,
+            rgba(99, 102, 241, 0.25) 0%,
+            transparent 50%
+          ),
+          #050811;
+        overflow: hidden;
+      }
+
+      .grid-lines {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 60px 60px;
+        pointer-events: none;
+      }
+
+      /* Top Badge */
+      .top-pill {
+        position: absolute;
+        top: 75px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(56, 189, 248, 0.45);
+        padding: 14px 34px;
+        border-radius: 999px;
+        backdrop-filter: blur(16px);
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #7dd3fc;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        z-index: 50;
+      }
+
+      .pulse-cyan {
+        width: 14px;
+        height: 14px;
+        background: #38bdf8;
+        border-radius: 50%;
+        box-shadow: 0 0 16px #38bdf8;
+      }
+
+      /* Scenes */
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 90px 50px;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .headline-goldie {
+        font-family: "Outfit", sans-serif;
+        font-size: 70px;
+        font-weight: 900;
+        line-height: 1.08;
+        text-align: center;
+        background: linear-gradient(135deg, #ffffff 40%, #7dd3fc 75%, #38bdf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 16px;
+      }
+
+      .sub-goldie {
+        font-size: 28px;
+        color: #cbd5e1;
+        text-align: center;
+        max-width: 880px;
+        line-height: 1.35;
+        margin-bottom: 30px;
+      }
+
+      /* Mockup Windows */
+      .window-box {
+        position: relative;
+        width: 920px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 35px 70px rgba(0, 0, 0, 0.75),
+          0 0 45px rgba(56, 189, 248, 0.2);
+        backdrop-filter: blur(20px);
+      }
+
+      .window-top {
+        height: 52px;
+        background: rgba(30, 41, 59, 0.75);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+      }
+
+      .dots {
+        display: flex;
+        gap: 10px;
+      }
+
+      .d { width: 14px; height: 14px; border-radius: 50%; }
+      .d.r { background: #ef4444; }
+      .d.y { background: #f59e0b; }
+      .d.g { background: #10b981; }
+
+      .w-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #94a3b8;
+      }
+
+      .w-img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Big Stat Highlight Box */
+      .big-stat-card {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(56, 189, 248, 0.2));
+        border: 2px solid rgba(16, 185, 129, 0.55);
+        border-radius: 32px;
+        padding: 40px;
+        text-align: center;
+        width: 920px;
+        margin-top: 24px;
+        box-shadow: 0 0 50px rgba(16, 185, 129, 0.3);
+      }
+
+      .stat-numbers {
+        font-family: "Outfit", sans-serif;
+        font-size: 82px;
+        font-weight: 900;
+        color: #34d399;
+        letter-spacing: -1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+      }
+
+      .stat-badge {
+        font-size: 28px;
+        background: rgba(239, 68, 68, 0.25);
+        color: #fca5a5;
+        padding: 6px 20px;
+        border-radius: 999px;
+        text-decoration: line-through;
+      }
+
+      .stat-arrow {
+        color: #38bdf8;
+        font-size: 64px;
+      }
+
+      .stat-new {
+        color: #34d399;
+        text-shadow: 0 0 30px rgba(52, 211, 153, 0.6);
+      }
+
+      .stat-label {
+        font-size: 26px;
+        color: #cbd5e1;
+        margin-top: 10px;
+        font-weight: 600;
+      }
+
+      /* Key Insight Card */
+      .goldie-card {
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 26px;
+        padding: 28px 36px;
+        width: 920px;
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      .goldie-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        flex-shrink: 0;
+      }
+
+      .goldie-text h3 {
+        font-family: "Outfit", sans-serif;
+        font-size: 30px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+
+      .goldie-text p {
+        font-size: 22px;
+        color: #cbd5e1;
+        margin-top: 6px;
+        line-height: 1.35;
+      }
+
+      /* Outro */
+      .outro-goldie {
+        background: linear-gradient(
+          135deg,
+          rgba(56, 189, 248, 0.25) 0%,
+          rgba(99, 102, 241, 0.25) 100%
+        );
+        border: 1px solid rgba(56, 189, 248, 0.45);
+        border-radius: 36px;
+        padding: 60px 40px;
+        text-align: center;
+        width: 900px;
+        box-shadow: 0 0 60px rgba(56, 189, 248, 0.35);
+      }
+
+      .cta-goldie {
+        margin-top: 35px;
+        background: linear-gradient(135deg, #38bdf8, #6366f1);
+        color: #ffffff;
+        padding: 24px 56px;
+        border-radius: 22px;
+        font-size: 30px;
+        font-weight: 800;
+        font-family: "Outfit", sans-serif;
+        display: inline-block;
+        box-shadow: 0 12px 35px rgba(56, 189, 248, 0.5);
+      }
+
+      /* Talking Avatar Widget */
+      .avatar-widget {
+        position: absolute;
+        bottom: 60px;
+        right: 60px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1.5px solid rgba(56, 189, 248, 0.55);
+        padding: 14px 24px 14px 16px;
+        border-radius: 999px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.3);
+        z-index: 60;
+      }
+
+      .avatar-circle {
+        position: relative;
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        border: 3px solid #38bdf8;
+        background: linear-gradient(135deg, #0c4a6e, #0284c7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .avatar-face {
+        font-size: 50px;
+        user-select: none;
+      }
+
+      .avatar-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .avatar-name {
+        font-family: "Outfit", sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: #f8fafc;
+      }
+
+      .avatar-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #7dd3fc;
+      }
+
+      .audio-bars {
+        display: flex;
+        gap: 3px;
+        align-items: flex-end;
+        height: 14px;
+      }
+
+      .bar {
+        width: 3px;
+        background: #38bdf8;
+        border-radius: 2px;
+      }
+
+      .footer-note {
+        position: absolute;
+        bottom: 80px;
+        left: 60px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      class="canvas"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="55"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div class="grid-lines"></div>
+
+      <!-- Top Badge -->
+      <div class="top-pill">
+        <div class="pulse-cyan"></div>
+        <span>APODEX 1.1 × AGENT TEAMS</span>
+      </div>
+
+      <!-- SCENE 1 (0s - 7.5s): HOOK -->
+      <div id="scene1" class="scene">
+        <h1 class="headline-goldie">APODEX 1.1:<br />AGENT TEAMS</h1>
+        <p class="sub-goldie">
+          Asynchrónne tímy AI agentov prichádzajú zmeniť celú automatizáciu
+        </p>
+
+        <div class="window-box">
+          <div class="window-top">
+            <div class="dots">
+              <span class="d r"></span>
+              <span class="d y"></span>
+              <span class="d g"></span>
+            </div>
+            <span class="w-title">Julian Goldie — Apodex 1.1 Deep Dive</span>
+            <span style="font-size: 16px; color: #38bdf8">● Asynchronous Team</span>
+          </div>
+          <img class="w-img" src="assets/julian_hook.jpg" alt="Julian Hook" />
+        </div>
+
+        <div class="goldie-card">
+          <div class="goldie-icon" style="background: linear-gradient(135deg, #0284c7, #0369a1); box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);">⚡</div>
+          <div class="goldie-text">
+            <h3>Paralelné tímy agentov</h3>
+            <p>Jeden model riadi, ostatní agenti vykonávajú úlohy súčasne.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 2 (7.5s - 16s): 1. MANAŽÉRSKY ROZPAD ÚLOH -->
+      <div id="scene2" class="scene">
+        <h2 class="headline-goldie">1. AI AKO PROJEKTOVÝ MANAŽÉR</h2>
+        <p class="sub-goldie">
+          Model najprv naplánuje rozpad práce a potom rozdelí úlohy
+        </p>
+
+        <div class="window-box">
+          <div class="window-top">
+            <div class="dots">
+              <span class="d r"></span>
+              <span class="d y"></span>
+              <span class="d g"></span>
+            </div>
+            <span class="w-title">Task Breakdown: Planning Phase</span>
+            <span style="font-size: 16px; color: #10b981">● Intelligent Split</span>
+          </div>
+          <img class="w-img" src="assets/julian_agents.jpg" alt="Agent Split" />
+        </div>
+
+        <div class="goldie-card">
+          <div class="goldie-icon" style="background: linear-gradient(135deg, #4f46e5, #4338ca); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);">🧠</div>
+          <div class="goldie-text">
+            <h3>Koniec jednokoľajového myslenia</h3>
+            <p>Úlohy sa rozdelia na samostatné paralelné vetvy namiesto čakania.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 3 (16s - 27s): 2. PARALELNÍ AGENTI (60 MIN -> 15 MIN) -->
+      <div id="scene3" class="scene">
+        <h2 class="headline-goldie">2. PARALELNÉ SPRACOVANIE</h2>
+        <p class="sub-goldie">
+          4 až 8 agentov pracuje v tom istom okamihu
+        </p>
+
+        <div class="big-stat-card">
+          <div class="stat-numbers">
+            <span class="stat-badge">60 MIN</span>
+            <span class="stat-arrow">➔</span>
+            <span class="stat-new">15 MIN</span>
+          </div>
+          <p class="stat-label">
+            Skrátenie času výskumu a zberu dát o 75 %
+          </p>
+        </div>
+
+        <div class="goldie-card">
+          <div class="goldie-icon" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);">🚀</div>
+          <div class="goldie-text">
+            <h3>Zmena pracovných návykov</h3>
+            <p>Úloha, ktorá trvala hodinu, je hotová za pár minút v pozadí.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 4 (27s - 39s): 3. ZDIEĽANÁ TABUĽA & LIVE STEERING -->
+      <div id="scene4" class="scene">
+        <h2 class="headline-goldie">3. ZDIEĽANÁ TABUĽA A RIADENIE</h2>
+        <p class="sub-goldie">
+          Zdieľaný kontext zabraňuje slepým uličkám a umožňuje zmenu smeru
+        </p>
+
+        <div class="window-box">
+          <div class="window-top">
+            <div class="dots">
+              <span class="d r"></span>
+              <span class="d y"></span>
+              <span class="d g"></span>
+            </div>
+            <span class="w-title">Shared Whiteboard & Continuous Integration</span>
+            <span style="font-size: 16px; color: #f59e0b">● Live Steering</span>
+          </div>
+          <img class="w-img" src="assets/julian_whiteboard.jpg" alt="Shared Whiteboard" />
+        </div>
+
+        <div class="goldie-card">
+          <div class="goldie-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);">📋</div>
+          <div class="goldie-text">
+            <h3>Live Steering za behu</h3>
+            <p>Môžete agenta presmerovať v minúte 2 namiesto reštartovania po 20 minútach.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 5 (39s - 55s): OPEN-SOURCE FRONTIER AGENT & OUTRO -->
+      <div id="scene5" class="scene">
+        <h2 class="headline-goldie" style="font-size: 58px;">FRONTIER AGENT: LOKÁLNY & PRIVATE</h2>
+        <p class="sub-goldie">
+          Open-source workbench priamo na vašom počítači
+        </p>
+
+        <div class="window-box" style="height: 380px;">
+          <div class="window-top">
+            <div class="dots">
+              <span class="d r"></span>
+              <span class="d y"></span>
+              <span class="d g"></span>
+            </div>
+            <span class="w-title">Frontier Agent — Open Source Cockpit</span>
+            <span style="font-size: 16px; color: #10b981">● 100% Private</span>
+          </div>
+          <img class="w-img" style="height: 328px;" src="assets/julian_frontier.jpg" alt="Frontier Agent" />
+        </div>
+
+        <div class="outro-goldie" style="margin-top: 24px; padding: 36px 30px;">
+          <h3 style="font-family: 'Outfit'; font-size: 34px; font-weight: 800;">
+            Sledujte pre viac praktických AI stratégií
+          </h3>
+          <div class="cta-goldie" style="margin-top: 18px; font-size: 22px; padding: 16px 38px;">
+            Odoberajte náš profil
+          </div>
+        </div>
+      </div>
+
+      <!-- TALKING AVATAR WIDGET -->
+      <div class="avatar-widget">
+        <div class="avatar-circle">
+          <div class="avatar-face">👨‍💻</div>
+        </div>
+        <div class="avatar-info">
+          <span class="avatar-name">AI Automatizácia</span>
+          <div class="avatar-status">
+            <div class="audio-bars">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+            <span>Slovenský hlas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Voiceover Audio Clip -->
+      <audio
+        id="voiceover"
+        class="clip"
+        data-start="0"
+        data-duration="54.02"
+        src="assets/voiceover.mp3"
+      ></audio>
+
+      <!-- Footer Branding -->
+      <div class="footer-note">
+        JULIAN GOLDIE × APODEX 1.1 RECAP
+      </div>
+    </div>
+
+    <!-- GSAP Master Timeline (Seek-Safe & Paused) -->
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // SCENE 1 (0s - 7.5s): Hook
+      tl.set("#scene1", { autoAlpha: 1 }, 0);
+      tl.from("#scene1 .headline-goldie", { y: 50, opacity: 0, duration: 0.7, ease: "power3.out" }, 0.1);
+      tl.from("#scene1 .sub-goldie", { y: 30, opacity: 0, duration: 0.7, ease: "power3.out" }, 0.3);
+      tl.from("#scene1 .window-box", { scale: 0.9, opacity: 0, duration: 0.8, ease: "back.out(1.3)" }, 0.5);
+      tl.from("#scene1 .goldie-card", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 0.8);
+      tl.to("#scene1", { autoAlpha: 0, y: -40, duration: 0.5, ease: "power2.in" }, 7.0);
+
+      // SCENE 2 (7.5s - 16s): 1. Task Breakdown
+      tl.set("#scene2", { autoAlpha: 1 }, 7.5);
+      tl.from("#scene2 .headline-goldie", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 7.6);
+      tl.from("#scene2 .sub-goldie", { y: 25, opacity: 0, duration: 0.7, ease: "power3.out" }, 7.8);
+      tl.from("#scene2 .window-box", { scale: 0.9, opacity: 0, duration: 0.7, ease: "power3.out" }, 8.0);
+      tl.from("#scene2 .goldie-card", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 8.4);
+      tl.to("#scene2", { autoAlpha: 0, y: -40, duration: 0.5, ease: "power2.in" }, 15.5);
+
+      // SCENE 3 (16s - 27s): 2. Parallel Processing (60m -> 15m)
+      tl.set("#scene3", { autoAlpha: 1 }, 16.0);
+      tl.from("#scene3 .headline-goldie", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 16.1);
+      tl.from("#scene3 .sub-goldie", { y: 25, opacity: 0, duration: 0.7, ease: "power3.out" }, 16.3);
+      tl.from("#scene3 .big-stat-card", { scale: 0.85, opacity: 0, duration: 0.8, ease: "back.out(1.4)" }, 16.5);
+      tl.from("#scene3 .goldie-card", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 17.0);
+      tl.to("#scene3", { autoAlpha: 0, y: -40, duration: 0.5, ease: "power2.in" }, 26.5);
+
+      // SCENE 4 (27s - 39s): 3. Shared Whiteboard & Steering
+      tl.set("#scene4", { autoAlpha: 1 }, 27.0);
+      tl.from("#scene4 .headline-goldie", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 27.1);
+      tl.from("#scene4 .sub-goldie", { y: 25, opacity: 0, duration: 0.7, ease: "power3.out" }, 27.3);
+      tl.from("#scene4 .window-box", { scale: 0.9, opacity: 0, duration: 0.7, ease: "power3.out" }, 27.5);
+      tl.from("#scene4 .goldie-card", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 28.0);
+      tl.to("#scene4", { autoAlpha: 0, y: -40, duration: 0.5, ease: "power2.in" }, 38.5);
+
+      // SCENE 5 (39s - 55s): Frontier Agent & Outro
+      tl.set("#scene5", { autoAlpha: 1 }, 39.0);
+      tl.from("#scene5 .headline-goldie", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 39.1);
+      tl.from("#scene5 .sub-goldie", { y: 25, opacity: 0, duration: 0.7, ease: "power3.out" }, 39.3);
+      tl.from("#scene5 .window-box", { scale: 0.9, opacity: 0, duration: 0.7, ease: "power3.out" }, 39.5);
+      tl.from("#scene5 .outro-goldie", { scale: 0.85, opacity: 0, duration: 0.8, ease: "back.out(1.4)" }, 40.0);
+      tl.from("#scene5 .cta-goldie", { y: 20, opacity: 0, duration: 0.6, ease: "power2.out" }, 40.6);
+
+      // Avatar Equalizer Bar Animation
+      tl.to(".audio-bars .bar", { scaleY: 1.8, yoyo: true, repeat: 55, stagger: 0.1, duration: 0.4, ease: "sine.inOut" }, 0.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

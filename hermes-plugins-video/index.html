@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="sk" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #06080d;
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+      }
+
+      .canvas {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: radial-gradient(
+            circle at 50% 10%,
+            rgba(99, 102, 241, 0.3) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at 85% 85%,
+            rgba(168, 85, 247, 0.25) 0%,
+            transparent 50%
+          ),
+          #06080d;
+        overflow: hidden;
+      }
+
+      .grid-pattern {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 50px 50px;
+        pointer-events: none;
+      }
+
+      /* Top Header Pill */
+      .top-badge {
+        position: absolute;
+        top: 75px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(129, 140, 248, 0.4);
+        padding: 14px 32px;
+        border-radius: 999px;
+        backdrop-filter: blur(16px);
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #a5b4fc;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        z-index: 50;
+      }
+
+      .pulse-dot {
+        width: 14px;
+        height: 14px;
+        background: #38bdf8;
+        border-radius: 50%;
+        box-shadow: 0 0 16px #38bdf8;
+      }
+
+      /* Scenes */
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 50px;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .headline-main {
+        font-family: "Outfit", sans-serif;
+        font-size: 72px;
+        font-weight: 900;
+        line-height: 1.1;
+        text-align: center;
+        background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 75%, #38bdf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 16px;
+      }
+
+      .sub-caption {
+        font-size: 28px;
+        color: #cbd5e1;
+        text-align: center;
+        max-width: 860px;
+        line-height: 1.35;
+        margin-bottom: 35px;
+      }
+
+      /* Window Mockups */
+      .window-frame {
+        position: relative;
+        width: 920px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7),
+          0 0 45px rgba(99, 102, 241, 0.25);
+        backdrop-filter: blur(20px);
+        transform-origin: center center;
+      }
+
+      .window-header {
+        height: 52px;
+        background: rgba(30, 41, 59, 0.7);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+      }
+
+      .window-dots {
+        display: flex;
+        gap: 10px;
+      }
+
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+      }
+      .dot.red { background: #ef4444; }
+      .dot.yellow { background: #f59e0b; }
+      .dot.green { background: #10b981; }
+
+      .window-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #94a3b8;
+      }
+
+      .window-img {
+        width: 100%;
+        height: 480px;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Interactive Terminal in Mockup */
+      .interactive-terminal {
+        background: #040711;
+        padding: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .term-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 24px;
+      }
+
+      .term-prompt {
+        color: #818cf8;
+        font-weight: 700;
+      }
+
+      .term-cmd {
+        color: #38bdf8;
+        font-weight: 600;
+      }
+
+      .term-cursor {
+        display: inline-block;
+        width: 12px;
+        height: 24px;
+        background: #38bdf8;
+        vertical-align: middle;
+      }
+
+      .term-btn {
+        align-self: flex-end;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: #ffffff;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-family: "Outfit", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+      }
+
+      /* Animated Mouse Cursor (Screen Studio Style) */
+      .mouse-pointer {
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        pointer-events: none;
+        z-index: 100;
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
+        transform: translate(-10px, -10px);
+        opacity: 0;
+      }
+
+      .click-ripple {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        border: 3px solid #38bdf8;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        z-index: 99;
+      }
+
+      /* Scene 3: Practical Showcase rows */
+      .tri-showcase {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        width: 920px;
+      }
+
+      .showcase-row {
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 24px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      }
+
+      .showcase-thumb {
+        width: 320px;
+        height: 180px;
+        border-radius: 16px;
+        object-fit: cover;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      .showcase-text h3 {
+        font-family: "Outfit", sans-serif;
+        font-size: 32px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+
+      .showcase-text p {
+        font-size: 22px;
+        color: #cbd5e1;
+        margin-top: 8px;
+        line-height: 1.35;
+      }
+
+      .badge-mini {
+        font-size: 16px;
+        background: rgba(99, 102, 241, 0.25);
+        border: 1px solid rgba(129, 140, 248, 0.5);
+        color: #c7d2fe;
+        padding: 4px 14px;
+        border-radius: 999px;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+
+      /* Talking Avatar Bubble (Bottom Corner) */
+      .avatar-widget {
+        position: absolute;
+        bottom: 60px;
+        right: 60px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: rgba(15, 23, 42, 0.88);
+        border: 1.5px solid rgba(99, 102, 241, 0.5);
+        padding: 14px 24px 14px 16px;
+        border-radius: 999px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(99, 102, 241, 0.3);
+        z-index: 60;
+      }
+
+      .avatar-circle {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 3px solid #818cf8;
+        background: linear-gradient(135deg, #1e1b4b, #4338ca);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .avatar-face {
+        font-size: 54px;
+        user-select: none;
+      }
+
+      .avatar-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .avatar-name {
+        font-family: "Outfit", sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: #f8fafc;
+      }
+
+      .avatar-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #38bdf8;
+      }
+
+      .audio-bars {
+        display: flex;
+        gap: 3px;
+        align-items: flex-end;
+        height: 14px;
+      }
+
+      .bar {
+        width: 3px;
+        background: #38bdf8;
+        border-radius: 2px;
+      }
+
+      /* Outro Box */
+      .outro-box {
+        background: linear-gradient(
+          135deg,
+          rgba(79, 70, 229, 0.25) 0%,
+          rgba(147, 51, 234, 0.25) 100%
+        );
+        border: 1px solid rgba(168, 85, 247, 0.45);
+        border-radius: 36px;
+        padding: 70px 50px;
+        text-align: center;
+        width: 900px;
+        box-shadow: 0 0 60px rgba(99, 102, 241, 0.35);
+      }
+
+      .cta-button {
+        margin-top: 40px;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        color: #ffffff;
+        padding: 24px 56px;
+        border-radius: 22px;
+        font-size: 30px;
+        font-weight: 800;
+        font-family: "Outfit", sans-serif;
+        display: inline-block;
+        box-shadow: 0 12px 35px rgba(99, 102, 241, 0.55);
+      }
+
+      .footer-note {
+        position: absolute;
+        bottom: 80px;
+        left: 60px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      class="canvas"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="15"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div class="grid-pattern"></div>
+
+      <!-- Top Branding Pill -->
+      <div class="top-badge">
+        <div class="pulse-dot"></div>
+        <span>HERMES DESKTOP PLUGINS</span>
+      </div>
+
+      <!-- Mouse Pointer SVG Cursor -->
+      <div id="cursor" class="mouse-pointer">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none">
+          <path
+            d="M5.5 3.2L18.8 12.8C19.7 13.5 19.3 15 18.2 15.1L13.5 15.4L17.2 21.2C17.6 21.8 17.1 22.7 16.3 22.8C15.8 22.9 15.4 22.6 15.1 22.2L11.5 16.3L8.2 19.3C7.4 20 6.1 19.4 6.1 18.3L5.1 4.5C5 3.6 5.8 3 6.6 3.4L5.5 3.2Z"
+            fill="#ffffff"
+            stroke="#000000"
+            stroke-width="1.8"
+          />
+        </svg>
+      </div>
+
+      <!-- Click Ripple Effect -->
+      <div id="ripple" class="click-ripple"></div>
+
+      <!-- SCENE 1: HOOK + INTERACTIVE INSTALL DEMO (0s - 4.5s) -->
+      <div id="scene1" class="scene">
+        <h1 class="headline-main">AI AGENT AKO<br />OPERAČNÝ SYSTÉM</h1>
+        <p class="sub-caption">
+          Nainštalujte si pluginy priamo do rozhrania jedným klikom
+        </p>
+
+        <div id="mockupWindow" class="window-frame">
+          <div class="window-header">
+            <div class="window-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="window-title">Hermes Terminal & Workspace</span>
+            <span id="installStatus" style="font-size: 16px; color: #f59e0b">● Ready to install</span>
+          </div>
+          <img class="window-img" src="assets/hermes_ui.jpg" alt="Hermes UI" />
+          
+          <div class="interactive-terminal">
+            <div class="term-row">
+              <span class="term-prompt">user@hermes:~$</span>
+              <span id="typewriterText" class="term-cmd"></span>
+              <span class="term-cursor"></span>
+            </div>
+            <button id="installBtn" class="term-btn">▶ Install Plugin</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 2: 25 UI ZONES (4.5s - 8.0s) -->
+      <div id="scene2" class="scene">
+        <h2 class="headline-main">25 ZÓN V ROZHRANÍ</h2>
+        <p class="sub-caption">
+          Umiestnite pluginy do bočného panelu, status baru alebo priamo do promptu
+        </p>
+
+        <div class="window-frame">
+          <div class="window-header">
+            <div class="window-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="window-title">Placement Playground (25 UI Zones)</span>
+            <span style="font-size: 16px; color: #818cf8">● Panes & Docks</span>
+          </div>
+          <img class="window-img" style="height: 600px;" src="assets/hermes_ui_placements.jpg" alt="25 Placements" />
+        </div>
+      </div>
+
+      <!-- SCENE 3: REAL PLUGINS (8.0s - 11.8s) -->
+      <div id="scene3" class="scene">
+        <h2 class="headline-main" style="font-size: 64px; margin-bottom: 30px;">
+          REÁLNE UKÁŽKY V PRAXI
+        </h2>
+
+        <div class="tri-showcase">
+          <!-- Row 1: Trading -->
+          <div id="showcase1" class="showcase-row">
+            <img class="showcase-thumb" src="assets/hermes_trading.jpg" alt="Trading Terminal" />
+            <div class="showcase-text">
+              <h3>📈 Trading Terminál <span class="badge-mini">TradingView</span></h3>
+              <p>Živé grafy a orderbook priamo v bočnom paneli počas práce.</p>
+            </div>
+          </div>
+
+          <!-- Row 2: Spotify -->
+          <div id="showcase2" class="showcase-row">
+            <img class="showcase-thumb" src="assets/hermes_spotify.jpg" alt="Spotify Controller" />
+            <div class="showcase-text">
+              <h3>🎵 Spotify Ovládač <span class="badge-mini">OAuth API</span></h3>
+              <p>Vyhľadávanie a prehrávanie hudby bez opustenia aplikácie.</p>
+            </div>
+          </div>
+
+          <!-- Row 3: SNES Zelda -->
+          <div id="showcase3" class="showcase-row">
+            <img class="showcase-thumb" src="assets/hermes_snes.jpg" alt="SNES Zelda" />
+            <div class="showcase-text">
+              <h3>🎮 Retro Emulátor <span class="badge-mini">Zelda SNES</span></h3>
+              <p>Hranie retro hier popri čakaní na odpovede AI agenta.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 4: OUTRO (11.8s - 15.0s) -->
+      <div id="scene4" class="scene">
+        <div class="outro-box">
+          <h2 style="font-family: 'Outfit'; font-size: 58px; font-weight: 900; margin-bottom: 20px;">
+            Vytvorte si vlastný plugin
+          </h2>
+          <p style="font-size: 28px; color: #cbd5e1; line-height: 1.5;">
+            Prepojte rýchly UI frontend s vlastným Python backendom a posuňte prácu s AI na novú úroveň.
+          </p>
+          <div class="cta-button">
+            Sledujte pre viac AI návodov
+          </div>
+        </div>
+      </div>
+
+      <!-- TALKING AVATAR WIDGET (Bottom Right) -->
+      <div class="avatar-widget">
+        <div class="avatar-circle">
+          <div class="avatar-face">👨‍💻</div>
+        </div>
+        <div class="avatar-info">
+          <span class="avatar-name">Tvoj AI Avatar</span>
+          <div class="avatar-status">
+            <div class="audio-bars">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+            <span>Slovenský hlas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Voiceover Audio Clip -->
+      <audio
+        id="voiceover"
+        class="clip"
+        data-start="0"
+        data-duration="14.35"
+        src="assets/voiceover.mp3"
+      ></audio>
+
+      <!-- Footer Branding -->
+      <div class="footer-note">
+        HERMES × HYPERFRAMES PIPELINE
+      </div>
+    </div>
+
+    <!-- GSAP Master Timeline (Seek-Safe & Paused) -->
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // SCENE 1 (0.0s - 4.5s): Hook & Interactive Mouse Click Demo
+      tl.set("#scene1", { autoAlpha: 1 }, 0);
+      tl.from("#scene1 .headline-main", { y: 50, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.1);
+      tl.from("#scene1 .sub-caption", { y: 30, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.3);
+      tl.from("#mockupWindow", { scale: 0.9, y: 40, opacity: 0, duration: 0.6, ease: "back.out(1.3)" }, 0.4);
+
+      // Screen Studio Zoom & Mouse Cursor Movement
+      tl.set("#cursor", { x: 950, y: 1500, opacity: 0 }, 0);
+      tl.to("#cursor", { opacity: 1, duration: 0.3 }, 1.0);
+      
+      // Move mouse to Install Button
+      tl.to("#cursor", { x: 740, y: 1290, duration: 1.1, ease: "power2.inOut" }, 1.0);
+      
+      // Punch-in camera zoom on the action
+      tl.to("#mockupWindow", { scale: 1.06, y: -20, duration: 1.0, ease: "power2.out" }, 1.2);
+
+      // Click Effect on Button
+      tl.set("#ripple", { x: 740, y: 1290 }, 2.1);
+      tl.to("#ripple", { scale: 1.5, opacity: 0.9, duration: 0.25, ease: "power1.out" }, 2.1);
+      tl.to("#ripple", { opacity: 0, duration: 0.2 }, 2.35);
+      tl.to("#installBtn", { scale: 0.92, duration: 0.15, yoyo: true, repeat: 1 }, 2.1);
+
+      // Status change & Typewriter text
+      tl.call(() => {
+        const el = document.getElementById("installStatus");
+        if (el) {
+          el.innerText = "● Installing plugin...";
+          el.style.color = "#38bdf8";
+        }
+      }, null, 2.2);
+
+      // Typewriter command simulation
+      const cmdText = "npx hermes plugins add trading-terminal";
+      for (let i = 1; i <= cmdText.length; i++) {
+        const substr = cmdText.substring(0, i);
+        tl.call(() => {
+          const t = document.getElementById("typewriterText");
+          if (t) t.innerText = substr;
+        }, null, 2.3 + (i * 0.04));
+      }
+
+      // Success status
+      tl.call(() => {
+        const el = document.getElementById("installStatus");
+        if (el) {
+          el.innerText = "● Installed & Active";
+          el.style.color = "#10b981";
+        }
+      }, null, 3.8);
+
+      // Mouse moves away
+      tl.to("#cursor", { x: 1000, y: 1600, opacity: 0, duration: 0.4, ease: "power2.in" }, 3.9);
+      tl.to("#scene1", { autoAlpha: 0, y: -40, duration: 0.4, ease: "power2.in" }, 4.1);
+
+      // SCENE 2 (4.5s - 8.0s): 25 Locations
+      tl.set("#scene2", { autoAlpha: 1 }, 4.5);
+      tl.from("#scene2 .headline-main", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 4.6);
+      tl.from("#scene2 .sub-caption", { y: 25, opacity: 0, duration: 0.6, ease: "power3.out" }, 4.8);
+      tl.from("#scene2 .window-frame", { scale: 0.92, opacity: 0, duration: 0.6, ease: "power3.out" }, 5.0);
+      tl.to("#scene2", { autoAlpha: 0, y: -40, duration: 0.5, ease: "power2.in" }, 7.6);
+
+      // SCENE 3 (8.0s - 11.8s): 3 Practical Demos
+      tl.set("#scene3", { autoAlpha: 1 }, 8.0);
+      tl.from("#scene3 .headline-main", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 8.1);
+      tl.from("#showcase1", { x: -70, opacity: 0, duration: 0.5, ease: "power3.out" }, 8.3);
+      tl.from("#showcase2", { x: 70, opacity: 0, duration: 0.5, ease: "power3.out" }, 8.8);
+      tl.from("#showcase3", { x: -70, opacity: 0, duration: 0.5, ease: "power3.out" }, 9.3);
+      tl.to("#scene3", { autoAlpha: 0, y: -40, duration: 0.5, ease: "power2.in" }, 11.4);
+
+      // SCENE 4 (11.8s - 15.0s): Outro & CTA
+      tl.set("#scene4", { autoAlpha: 1 }, 11.8);
+      tl.from("#scene4 .outro-box", { scale: 0.85, opacity: 0, duration: 0.8, ease: "back.out(1.4)" }, 11.9);
+      tl.from("#scene4 .cta-button", { y: 20, opacity: 0, duration: 0.6, ease: "power2.out" }, 12.5);
+
+      // Avatar Widget subtle animation
+      tl.to(".avatar-widget", { scale: 1.03, yoyo: true, repeat: 5, duration: 1.2, ease: "sine.inOut" }, 0);
+      tl.to(".audio-bars .bar", { scaleY: 1.8, yoyo: true, repeat: 10, stagger: 0.1, duration: 0.4, ease: "sine.inOut" }, 0.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

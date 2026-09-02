@@ -1,0 +1,1627 @@
+[
+  {
+    "text": "New Apodex update is crazy good, and I",
+    "start": 0.0,
+    "duration": 4.68
+  },
+  {
+    "text": "want to show you exactly why. Apodex 1.1",
+    "start": 2.12,
+    "duration": 4.32
+  },
+  {
+    "text": "just got announced. It's a new model",
+    "start": 4.68,
+    "duration": 3.44
+  },
+  {
+    "text": "family, and the headline feature is",
+    "start": 6.44,
+    "duration": 3.52
+  },
+  {
+    "text": "something called an asynchronous agent",
+    "start": 8.12,
+    "duration": 3.96
+  },
+  {
+    "text": "team. In plain English, you give it one",
+    "start": 9.96,
+    "duration": 3.84
+  },
+  {
+    "text": "big job, it breaks that job into smaller",
+    "start": 12.08,
+    "duration": 4.32
+  },
+  {
+    "text": "jobs, then it runs a bunch of AI agents",
+    "start": 13.8,
+    "duration": 4.48
+  },
+  {
+    "text": "on those smaller jobs at the same time,",
+    "start": 16.4,
+    "duration": 3.72
+  },
+  {
+    "text": "pulls all their work back together, and",
+    "start": 18.28,
+    "duration": 3.32
+  },
+  {
+    "text": "lets you jump in and change direction",
+    "start": 20.12,
+    "duration": 3.0
+  },
+  {
+    "text": "while they're still working. You don't",
+    "start": 21.6,
+    "duration": 3.4
+  },
+  {
+    "text": "wait, you don't babysit, you steer. And",
+    "start": 23.12,
+    "duration": 2.92
+  },
+  {
+    "text": "there's a second part to this",
+    "start": 25.0,
+    "duration": 2.24
+  },
+  {
+    "text": "announcement that I think a lot of",
+    "start": 26.04,
+    "duration": 3.04
+  },
+  {
+    "text": "people are going to miss. So, stay with",
+    "start": 27.24,
+    "duration": 3.88
+  },
+  {
+    "text": "me, because it's that actually puts this",
+    "start": 29.08,
+    "duration": 3.519
+  },
+  {
+    "text": "in your hands for free. I'll get to it",
+    "start": 31.12,
+    "duration": 3.12
+  },
+  {
+    "text": "in a few minutes. Let me start with the",
+    "start": 32.599,
+    "duration": 3.401
+  },
+  {
+    "text": "problem this fixes, because if you've",
+    "start": 34.24,
+    "duration": 4.16
+  },
+  {
+    "text": "used any AI agent this year, you've felt",
+    "start": 36.0,
+    "duration": 4.68
+  },
+  {
+    "text": "it. You ask an AI to do a real task,",
+    "start": 38.4,
+    "duration": 4.28
+  },
+  {
+    "text": "something with layers. Go research the",
+    "start": 40.68,
+    "duration": 3.96
+  },
+  {
+    "text": "top 10 AI automation communities,",
+    "start": 42.68,
+    "duration": 4.0
+  },
+  {
+    "text": "compare what they offer, find the gaps,",
+    "start": 44.64,
+    "duration": 4.04
+  },
+  {
+    "text": "and write me a plan. So, it starts, and",
+    "start": 46.68,
+    "duration": 3.6
+  },
+  {
+    "text": "it goes one step at a time. Search,",
+    "start": 48.68,
+    "duration": 3.52
+  },
+  {
+    "text": "read, search, read, think, write, one",
+    "start": 50.28,
+    "duration": 3.32
+  },
+  {
+    "text": "thread, one line of thinking. You sit",
+    "start": 52.2,
+    "duration": 2.96
+  },
+  {
+    "text": "there watching a little spinner. 20",
+    "start": 53.6,
+    "duration": 3.16
+  },
+  {
+    "text": "minutes later, it hands you something,",
+    "start": 55.16,
+    "duration": 3.16
+  },
+  {
+    "text": "and half of it is wrong, because it went",
+    "start": 56.76,
+    "duration": 3.48
+  },
+  {
+    "text": "down the wrong road at minute four, and",
+    "start": 58.32,
+    "duration": 3.48
+  },
+  {
+    "text": "you had no way to stop it. That's the",
+    "start": 60.24,
+    "duration": 3.6
+  },
+  {
+    "text": "wall. One agent, one brain, one path,",
+    "start": 61.8,
+    "duration": 4.32
+  },
+  {
+    "text": "and no steering wheel. Apodex 1.1",
+    "start": 63.84,
+    "duration": 4.0
+  },
+  {
+    "text": "attacks that wall from three sides at",
+    "start": 66.12,
+    "duration": 4.32
+  },
+  {
+    "text": "once. Task breakdown, parallel agents,",
+    "start": 67.84,
+    "duration": 4.0
+  },
+  {
+    "text": "and live steering. I want to walk",
+    "start": 70.44,
+    "duration": 3.16
+  },
+  {
+    "text": "through each one, because the third one",
+    "start": 71.84,
+    "duration": 3.56
+  },
+  {
+    "text": "is the one people are sleeping on. Start",
+    "start": 73.6,
+    "duration": 3.64
+  },
+  {
+    "text": "with the breakdown. When you hand Apodex",
+    "start": 75.4,
+    "duration": 4.08
+  },
+  {
+    "text": "1.1 a messy job, it doesn't just start",
+    "start": 77.24,
+    "duration": 4.24
+  },
+  {
+    "text": "typing. It plans first. It looks at the",
+    "start": 79.48,
+    "duration": 4.24
+  },
+  {
+    "text": "whole ask and chops it into pieces that",
+    "start": 81.48,
+    "duration": 4.08
+  },
+  {
+    "text": "can be worked on separately. Think about",
+    "start": 83.72,
+    "duration": 3.2
+  },
+  {
+    "text": "how a good manager handles a big",
+    "start": 85.56,
+    "duration": 2.96
+  },
+  {
+    "text": "project. They don't do all of it. They",
+    "start": 86.92,
+    "duration": 3.2
+  },
+  {
+    "text": "look at it, spot the five separate",
+    "start": 88.52,
+    "duration": 3.44
+  },
+  {
+    "text": "chunks, and hand each chunk to a",
+    "start": 90.12,
+    "duration": 3.76
+  },
+  {
+    "text": "different person. That planning step",
+    "start": 91.96,
+    "duration": 3.48
+  },
+  {
+    "text": "sounds boring. It isn't. It's the whole",
+    "start": 93.88,
+    "duration": 3.6
+  },
+  {
+    "text": "ballgame, because a job that gets split",
+    "start": 95.44,
+    "duration": 3.88
+  },
+  {
+    "text": "badly gets done badly, no matter how",
+    "start": 97.48,
+    "duration": 3.48
+  },
+  {
+    "text": "smart the workers are. If you've ever",
+    "start": 99.32,
+    "duration": 3.44
+  },
+  {
+    "text": "been on a team where two people did the",
+    "start": 100.96,
+    "duration": 3.76
+  },
+  {
+    "text": "same task, and nobody did the important",
+    "start": 102.76,
+    "duration": 3.44
+  },
+  {
+    "text": "one, you know what a bad split looks",
+    "start": 104.72,
+    "duration": 3.28
+  },
+  {
+    "text": "like. So, the model has been trained to",
+    "start": 106.2,
+    "duration": 3.96
+  },
+  {
+    "text": "be the manager, not just the worker.",
+    "start": 108.0,
+    "duration": 3.88
+  },
+  {
+    "text": "Here's a real one you could run today.",
+    "start": 110.16,
+    "duration": 3.44
+  },
+  {
+    "text": "Ask it to research every objection",
+    "start": 111.88,
+    "duration": 3.24
+  },
+  {
+    "text": "people have about joining an AI",
+    "start": 113.6,
+    "duration": 3.56
+  },
+  {
+    "text": "automation community, then write answers",
+    "start": 115.12,
+    "duration": 4.4
+  },
+  {
+    "text": "to each one. It splits that into agents,",
+    "start": 117.16,
+    "duration": 3.88
+  },
+  {
+    "text": "one digging through forum complaints,",
+    "start": 119.52,
+    "duration": 3.2
+  },
+  {
+    "text": "one on video comments, one on competitor",
+    "start": 121.04,
+    "duration": 3.84
+  },
+  {
+    "text": "sales pages, and they all run at once.",
+    "start": 122.72,
+    "duration": 4.16
+  },
+  {
+    "text": "Which brings me to part two, parallel.",
+    "start": 124.88,
+    "duration": 4.36
+  },
+  {
+    "text": "Right now, most AI work is a queue. Step",
+    "start": 126.88,
+    "duration": 4.48
+  },
+  {
+    "text": "one finishes, then step two starts.",
+    "start": 129.24,
+    "duration": 4.24
+  },
+  {
+    "text": "Appadex 1.1 runs those chunks side by",
+    "start": 131.36,
+    "duration": 4.68
+  },
+  {
+    "text": "side. Four agents, eight agents, working",
+    "start": 133.48,
+    "duration": 4.12
+  },
+  {
+    "text": "at the same moment. Let me put numbers",
+    "start": 136.04,
+    "duration": 3.64
+  },
+  {
+    "text": "on that because faster means nothing on",
+    "start": 137.6,
+    "duration": 4.04
+  },
+  {
+    "text": "its own. Say your research job has six",
+    "start": 139.68,
+    "duration": 4.24
+  },
+  {
+    "text": "parts, each part takes 10 minutes. In a",
+    "start": 141.64,
+    "duration": 4.36
+  },
+  {
+    "text": "line, that's 60 minutes. Side by side,",
+    "start": 143.92,
+    "duration": 3.8
+  },
+  {
+    "text": "that's 10 minutes plus a little time to",
+    "start": 146.0,
+    "duration": 3.76
+  },
+  {
+    "text": "stitch it together. So, call it 15. 60",
+    "start": 147.72,
+    "duration": 3.72
+  },
+  {
+    "text": "minutes down to 15. Same work, same",
+    "start": 149.76,
+    "duration": 3.6
+  },
+  {
+    "text": "model, just a different shape. And that",
+    "start": 151.44,
+    "duration": 4.2
+  },
+  {
+    "text": "shape change does something sneaky to",
+    "start": 153.36,
+    "duration": 4.16
+  },
+  {
+    "text": "your behavior. When a task takes an",
+    "start": 155.64,
+    "duration": 3.56
+  },
+  {
+    "text": "hour, you do it once a month. When it",
+    "start": 157.52,
+    "duration": 3.76
+  },
+  {
+    "text": "takes 15 minutes, you do it every week.",
+    "start": 159.2,
+    "duration": 3.64
+  },
+  {
+    "text": "When you do it every week, you start",
+    "start": 161.28,
+    "duration": 3.36
+  },
+  {
+    "text": "spotting patterns you never saw before.",
+    "start": 162.84,
+    "duration": 3.84
+  },
+  {
+    "text": "Speed doesn't just save you time. It",
+    "start": 164.64,
+    "duration": 4.04
+  },
+  {
+    "text": "changes what you're willing to try. But",
+    "start": 166.68,
+    "duration": 4.2
+  },
+  {
+    "text": "parallel work has a famous problem, and",
+    "start": 168.68,
+    "duration": 3.6
+  },
+  {
+    "text": "I want to be honest about it before I",
+    "start": 170.88,
+    "duration": 3.6
+  },
+  {
+    "text": "hype anything. Split a job across five",
+    "start": 172.28,
+    "duration": 4.16
+  },
+  {
+    "text": "people and they drift. Person one",
+    "start": 174.48,
+    "duration": 4.0
+  },
+  {
+    "text": "assumes one thing, person three assumes",
+    "start": 176.44,
+    "duration": 3.88
+  },
+  {
+    "text": "the opposite. They finish, you staple",
+    "start": 178.48,
+    "duration": 3.44
+  },
+  {
+    "text": "their work together, and it reads like",
+    "start": 180.32,
+    "duration": 3.0
+  },
+  {
+    "text": "five different documents wearing a",
+    "start": 181.92,
+    "duration": 3.48
+  },
+  {
+    "text": "trench coat. Anybody who's ever managed",
+    "start": 183.32,
+    "duration": 4.199
+  },
+  {
+    "text": "a team knows this pain. This is where",
+    "start": 185.4,
+    "duration": 3.76
+  },
+  {
+    "text": "the third piece comes in, and it's the",
+    "start": 187.519,
+    "duration": 4.561
+  },
+  {
+    "text": "bit I'd underline twice. Appadex 1.1",
+    "start": 189.16,
+    "duration": 5.2
+  },
+  {
+    "text": "continuously integrates their findings",
+    "start": 192.08,
+    "duration": 4.159
+  },
+  {
+    "text": "while the agents work, not at the end.",
+    "start": 194.36,
+    "duration": 3.72
+  },
+  {
+    "text": "So, agent two finds something important,",
+    "start": 196.239,
+    "duration": 3.681
+  },
+  {
+    "text": "that finding gets folded back into the",
+    "start": 198.08,
+    "duration": 3.64
+  },
+  {
+    "text": "shared picture, and the other agents can",
+    "start": 199.92,
+    "duration": 3.0
+  },
+  {
+    "text": "work off it. It's like a shared",
+    "start": 201.72,
+    "duration": 2.64
+  },
+  {
+    "text": "whiteboard in the middle of the room",
+    "start": 202.92,
+    "duration": 3.0
+  },
+  {
+    "text": "instead of five people locked in five",
+    "start": 204.36,
+    "duration": 3.56
+  },
+  {
+    "text": "separate offices. Old way, an agent digs",
+    "start": 205.92,
+    "duration": 3.56
+  },
+  {
+    "text": "for 20 minutes on a dead end that",
+    "start": 207.92,
+    "duration": 2.88
+  },
+  {
+    "text": "another agent already ruled out in",
+    "start": 209.48,
+    "duration": 3.039
+  },
+  {
+    "text": "minute three. New way, that dead end",
+    "start": 210.8,
+    "duration": 3.08
+  },
+  {
+    "text": "gets crossed off the board and everyone",
+    "start": 212.519,
+    "duration": 2.961
+  },
+  {
+    "text": "sees it. And then there's the steering.",
+    "start": 213.88,
+    "duration": 3.12
+  },
+  {
+    "text": "You can step in and guide or redirect",
+    "start": 215.48,
+    "duration": 3.2
+  },
+  {
+    "text": "the work at any time while it's running.",
+    "start": 217.0,
+    "duration": 2.959
+  },
+  {
+    "text": "You watch the whiteboard fill up, you",
+    "start": 218.68,
+    "duration": 2.6
+  },
+  {
+    "text": "see agent four heading somewhere",
+    "start": 219.959,
+    "duration": 3.401
+  },
+  {
+    "text": "useless, and you say, \"Stop. Go this way",
+    "start": 221.28,
+    "duration": 4.2
+  },
+  {
+    "text": "instead.\" The team adjusts and keeps",
+    "start": 223.36,
+    "duration": 4.0
+  },
+  {
+    "text": "going. Think about what that kills. It",
+    "start": 225.48,
+    "duration": 3.88
+  },
+  {
+    "text": "kills the 20-minute wait to find out it",
+    "start": 227.36,
+    "duration": 3.8
+  },
+  {
+    "text": "misunderstood you. It kills starting",
+    "start": 229.36,
+    "duration": 3.92
+  },
+  {
+    "text": "over. You get to correct it a minute too",
+    "start": 231.16,
+    "duration": 3.92
+  },
+  {
+    "text": "when the correction is cheap. Honestly,",
+    "start": 233.28,
+    "duration": 3.52
+  },
+  {
+    "text": "that one change might matter more than",
+    "start": 235.08,
+    "duration": 3.44
+  },
+  {
+    "text": "any benchmark because the number one",
+    "start": 236.8,
+    "duration": 3.96
+  },
+  {
+    "text": "reason people quit on AI agents isn't",
+    "start": 238.52,
+    "duration": 3.96
+  },
+  {
+    "text": "that the AI is dumb, it's that they gave",
+    "start": 240.76,
+    "duration": 4.0
+  },
+  {
+    "text": "a fuzzy instruction, got a fuzzy result,",
+    "start": 242.48,
+    "duration": 4.12
+  },
+  {
+    "text": "and had no way to fix it mid-flight",
+    "start": 244.76,
+    "duration": 3.64
+  },
+  {
+    "text": "without going back to square one. Now,",
+    "start": 246.6,
+    "duration": 3.76
+  },
+  {
+    "text": "quick pause because this next part is",
+    "start": 248.4,
+    "duration": 3.88
+  },
+  {
+    "text": "where most people either get it or miss",
+    "start": 250.36,
+    "duration": 3.599
+  },
+  {
+    "text": "it completely. If you want to actually",
+    "start": 252.28,
+    "duration": 4.079
+  },
+  {
+    "text": "use Apodex 1.1 agent teams in your",
+    "start": 253.959,
+    "duration": 4.241
+  },
+  {
+    "text": "business, not just watch a video about",
+    "start": 256.359,
+    "duration": 3.681
+  },
+  {
+    "text": "them, that's what we do inside the AI",
+    "start": 258.2,
+    "duration": 3.68
+  },
+  {
+    "text": "Profit Boardroom. We've got a 30-day",
+    "start": 260.04,
+    "duration": 4.04
+  },
+  {
+    "text": "roadmap built around agent workflows",
+    "start": 261.88,
+    "duration": 3.56
+  },
+  {
+    "text": "exactly like this. How to write the",
+    "start": 264.08,
+    "duration": 3.12
+  },
+  {
+    "text": "brief so the split comes out right, how",
+    "start": 265.44,
+    "duration": 3.36
+  },
+  {
+    "text": "to set up a research team that finds you",
+    "start": 267.2,
+    "duration": 3.36
+  },
+  {
+    "text": "leads while you sleep, how to steer it",
+    "start": 268.8,
+    "duration": 3.72
+  },
+  {
+    "text": "mid-run instead of starting over, four",
+    "start": 270.56,
+    "duration": 3.52
+  },
+  {
+    "text": "coaching calls every week where you can",
+    "start": 272.52,
+    "duration": 3.28
+  },
+  {
+    "text": "bring your own setup and we'll fix it",
+    "start": 274.08,
+    "duration": 3.24
+  },
+  {
+    "text": "live. Business owners in there, a lot of",
+    "start": 275.8,
+    "duration": 2.96
+  },
+  {
+    "text": "them running agent stacks for client",
+    "start": 277.32,
+    "duration": 3.12
+  },
+  {
+    "text": "work and lead gen right now. Links in",
+    "start": 278.76,
+    "duration": 3.8
+  },
+  {
+    "text": "the description and comments or go to",
+    "start": 280.44,
+    "duration": 4.0
+  },
+  {
+    "text": "aiprofitboardroom.com.",
+    "start": 282.56,
+    "duration": 4.12
+  },
+  {
+    "text": "Okay, back to it because I promised you",
+    "start": 284.44,
+    "duration": 3.68
+  },
+  {
+    "text": "the part that puts this in your hands",
+    "start": 286.68,
+    "duration": 3.16
+  },
+  {
+    "text": "and here it is. They're open sourcing",
+    "start": 288.12,
+    "duration": 3.36
+  },
+  {
+    "text": "something called Frontier Agent.",
+    "start": 289.84,
+    "duration": 3.52
+  },
+  {
+    "text": "Frontier Agent is a research workbench",
+    "start": 291.48,
+    "duration": 4.12
+  },
+  {
+    "text": "for the Apodex 1.1 family and it's",
+    "start": 293.36,
+    "duration": 4.08
+  },
+  {
+    "text": "locally deployable. Two bits of jargon",
+    "start": 295.6,
+    "duration": 3.56
+  },
+  {
+    "text": "there, so let me translate both. A",
+    "start": 297.44,
+    "duration": 3.52
+  },
+  {
+    "text": "workbench just means a proper place to",
+    "start": 299.16,
+    "duration": 3.48
+  },
+  {
+    "text": "work. Instead of typing into a little",
+    "start": 300.96,
+    "duration": 3.6
+  },
+  {
+    "text": "chat box and hoping you get a setup",
+    "start": 302.64,
+    "duration": 3.6
+  },
+  {
+    "text": "where you can see the agents, see what",
+    "start": 304.56,
+    "duration": 3.32
+  },
+  {
+    "text": "each one is doing, see the findings",
+    "start": 306.24,
+    "duration": 3.28
+  },
+  {
+    "text": "piling up, and reach in and change",
+    "start": 307.88,
+    "duration": 3.2
+  },
+  {
+    "text": "things. A cockpit instead of a text",
+    "start": 309.52,
+    "duration": 3.6
+  },
+  {
+    "text": "message. Locally deployable means you",
+    "start": 311.08,
+    "duration": 3.64
+  },
+  {
+    "text": "can run it on your own machine. Your",
+    "start": 313.12,
+    "duration": 3.52
+  },
+  {
+    "text": "files stay on your computer. Your client",
+    "start": 314.72,
+    "duration": 3.32
+  },
+  {
+    "text": "documents, your notes, your customer",
+    "start": 316.64,
+    "duration": 2.96
+  },
+  {
+    "text": "list, your half-finished ideas, they",
+    "start": 318.04,
+    "duration": 2.92
+  },
+  {
+    "text": "don't have to go anywhere. And it",
+    "start": 319.6,
+    "duration": 3.2
+  },
+  {
+    "text": "includes synchronous agent teams, so the",
+    "start": 320.96,
+    "duration": 3.6
+  },
+  {
+    "text": "headline feature of the paid model",
+    "start": 322.8,
+    "duration": 3.84
+  },
+  {
+    "text": "family shows up in the free open-source",
+    "start": 324.56,
+    "duration": 3.76
+  },
+  {
+    "text": "tool. Think about who that unlocks.",
+    "start": 326.64,
+    "duration": 3.36
+  },
+  {
+    "text": "Anyone with rules about where their data",
+    "start": 328.32,
+    "duration": 4.0
+  },
+  {
+    "text": "can live. Lawyers, accountants, doctors'",
+    "start": 330.0,
+    "duration": 4.2
+  },
+  {
+    "text": "offices, anyone handling other people's",
+    "start": 332.32,
+    "duration": 3.84
+  },
+  {
+    "text": "private information. These are the exact",
+    "start": 334.2,
+    "duration": 3.32
+  },
+  {
+    "text": "people who've been sitting on the",
+    "start": 336.16,
+    "duration": 3.56
+  },
+  {
+    "text": "sidelines saying, \"I'd love to use AI,",
+    "start": 337.52,
+    "duration": 4.16
+  },
+  {
+    "text": "but I can't upload this stuff.\" A local",
+    "start": 339.72,
+    "duration": 3.76
+  },
+  {
+    "text": "workbench takes that objection off the",
+    "start": 341.68,
+    "duration": 3.8
+  },
+  {
+    "text": "table. And there's a second thing local",
+    "start": 343.48,
+    "duration": 4.28
+  },
+  {
+    "text": "gets you that nobody talks about. Your",
+    "start": 345.48,
+    "duration": 4.6
+  },
+  {
+    "text": "own files become the research material.",
+    "start": 347.76,
+    "duration": 4.0
+  },
+  {
+    "text": "The agent team isn't just searching the",
+    "start": 350.08,
+    "duration": 3.52
+  },
+  {
+    "text": "internet. It's reading your folders,",
+    "start": 351.76,
+    "duration": 3.84
+  },
+  {
+    "text": "your past proposals, your call notes,",
+    "start": 353.6,
+    "duration": 3.2
+  },
+  {
+    "text": "your old campaigns. That's a very",
+    "start": 355.6,
+    "duration": 2.96
+  },
+  {
+    "text": "different animal. Say you point it at",
+    "start": 356.8,
+    "duration": 3.6
+  },
+  {
+    "text": "two years of your own customer emails",
+    "start": 358.56,
+    "duration": 3.32
+  },
+  {
+    "text": "and ask it to find the five questions",
+    "start": 360.4,
+    "duration": 3.76
+  },
+  {
+    "text": "people ask before they buy. Three agents",
+    "start": 361.88,
+    "duration": 4.0
+  },
+  {
+    "text": "split those emails up and hand you the",
+    "start": 364.16,
+    "duration": 3.4
+  },
+  {
+    "text": "answer in a few minutes. Try that with a",
+    "start": 365.88,
+    "duration": 3.24
+  },
+  {
+    "text": "normal chat window. You can't. The",
+    "start": 367.56,
+    "duration": 3.16
+  },
+  {
+    "text": "window's too small and you'll be pasting",
+    "start": 369.12,
+    "duration": 3.0
+  },
+  {
+    "text": "for a week. Now, let's talk about what",
+    "start": 370.72,
+    "duration": 2.84
+  },
+  {
+    "text": "this actually looks like in your day",
+    "start": 372.12,
+    "duration": 2.68
+  },
+  {
+    "text": "because I don't want this to stay",
+    "start": 373.56,
+    "duration": 3.08
+  },
+  {
+    "text": "theoretical. The announcement calls out",
+    "start": 374.8,
+    "duration": 3.72
+  },
+  {
+    "text": "complex professional work, scientific",
+    "start": 376.64,
+    "duration": 3.92
+  },
+  {
+    "text": "research, and deep search. Deep search",
+    "start": 378.52,
+    "duration": 3.56
+  },
+  {
+    "text": "is the one I'd focus on if you run any",
+    "start": 380.56,
+    "duration": 3.359
+  },
+  {
+    "text": "kind of business. Deep search means the",
+    "start": 382.08,
+    "duration": 3.48
+  },
+  {
+    "text": "agent doesn't just grab the first page",
+    "start": 383.919,
+    "duration": 3.681
+  },
+  {
+    "text": "of results. It goes down the layers. It",
+    "start": 385.56,
+    "duration": 4.16
+  },
+  {
+    "text": "reads a source, finds a claim, chases",
+    "start": 387.6,
+    "duration": 3.76
+  },
+  {
+    "text": "that claim, checks it against another",
+    "start": 389.72,
+    "duration": 3.36
+  },
+  {
+    "text": "source, and keeps pulling the thread.",
+    "start": 391.36,
+    "duration": 3.08
+  },
+  {
+    "text": "It's the difference between asking a",
+    "start": 393.08,
+    "duration": 3.04
+  },
+  {
+    "text": "question and actually investigating",
+    "start": 394.44,
+    "duration": 3.28
+  },
+  {
+    "text": "something. Here's another shift, and",
+    "start": 396.12,
+    "duration": 3.08
+  },
+  {
+    "text": "it's a bigger deal than it looks.",
+    "start": 397.72,
+    "duration": 3.0
+  },
+  {
+    "text": "Because the work runs in the background,",
+    "start": 399.2,
+    "duration": 3.32
+  },
+  {
+    "text": "you stop sitting there. Right now, most",
+    "start": 400.72,
+    "duration": 3.84
+  },
+  {
+    "text": "people use AI in a very old-fashioned",
+    "start": 402.52,
+    "duration": 3.96
+  },
+  {
+    "text": "way. Type, wait, read, type again.",
+    "start": 404.56,
+    "duration": 3.16
+  },
+  {
+    "text": "You're stuck to the chair for the whole",
+    "start": 406.48,
+    "duration": 3.08
+  },
+  {
+    "text": "thing. With an agent team, you kick it",
+    "start": 407.72,
+    "duration": 3.36
+  },
+  {
+    "text": "off and go do something else. Come back,",
+    "start": 409.56,
+    "duration": 2.76
+  },
+  {
+    "text": "check the whiteboard, nudge it, leave",
+    "start": 411.08,
+    "duration": 3.28
+  },
+  {
+    "text": "again. The habit that wins is going to",
+    "start": 412.32,
+    "duration": 3.72
+  },
+  {
+    "text": "be a morning habit. You start two or",
+    "start": 414.36,
+    "duration": 3.64
+  },
+  {
+    "text": "three agent teams on the jobs that used",
+    "start": 416.04,
+    "duration": 3.52
+  },
+  {
+    "text": "to eat your week. Then you go do the",
+    "start": 418.0,
+    "duration": 3.2
+  },
+  {
+    "text": "thing only you can do. Talk to",
+    "start": 419.56,
+    "duration": 3.64
+  },
+  {
+    "text": "customers, close deals, make the actual",
+    "start": 421.2,
+    "duration": 3.68
+  },
+  {
+    "text": "decisions. You check in twice, you",
+    "start": 423.2,
+    "duration": 3.719
+  },
+  {
+    "text": "correct once. By the afternoon, work",
+    "start": 424.88,
+    "duration": 3.64
+  },
+  {
+    "text": "that used to take three days is sitting",
+    "start": 426.919,
+    "duration": 3.161
+  },
+  {
+    "text": "there waiting for you. But, I want to",
+    "start": 428.52,
+    "duration": 3.32
+  },
+  {
+    "text": "steelman the skeptic here because I know",
+    "start": 430.08,
+    "duration": 3.48
+  },
+  {
+    "text": "exactly what some of you are thinking.",
+    "start": 431.84,
+    "duration": 3.2
+  },
+  {
+    "text": "You're thinking I've heard this before.",
+    "start": 433.56,
+    "duration": 3.32
+  },
+  {
+    "text": "Every few months there's a new model, a",
+    "start": 435.04,
+    "duration": 3.4
+  },
+  {
+    "text": "new agent, a new thing that changes",
+    "start": 436.88,
+    "duration": 3.12
+  },
+  {
+    "text": "everything. And then I try it and it",
+    "start": 438.44,
+    "duration": 3.4
+  },
+  {
+    "text": "writes me a mediocre blog post. That's",
+    "start": 440.0,
+    "duration": 3.4
+  },
+  {
+    "text": "fair. I get it. So, let me be straight",
+    "start": 441.84,
+    "duration": 3.8
+  },
+  {
+    "text": "about the limits. Parallel agents don't",
+    "start": 443.4,
+    "duration": 4.24
+  },
+  {
+    "text": "fix a bad brief. If your instruction is",
+    "start": 445.64,
+    "duration": 3.92
+  },
+  {
+    "text": "vague, you now get five agents being",
+    "start": 447.64,
+    "duration": 4.32
+  },
+  {
+    "text": "vague at the same time. Faster confusion",
+    "start": 449.56,
+    "duration": 4.4
+  },
+  {
+    "text": "is still confusion. Verification is",
+    "start": 451.96,
+    "duration": 3.8
+  },
+  {
+    "text": "still on you. An agent team that runs",
+    "start": 453.96,
+    "duration": 3.72
+  },
+  {
+    "text": "deep search can still pull in something",
+    "start": 455.76,
+    "duration": 3.96
+  },
+  {
+    "text": "wrong. More agents means more places for",
+    "start": 457.68,
+    "duration": 3.76
+  },
+  {
+    "text": "a mistake to hide, and it comes back",
+    "start": 459.72,
+    "duration": 3.24
+  },
+  {
+    "text": "looking polished and confident. So,",
+    "start": 461.44,
+    "duration": 3.44
+  },
+  {
+    "text": "spot-check the important claims always,",
+    "start": 462.96,
+    "duration": 3.92
+  },
+  {
+    "text": "and splitting isn't free. Some jobs",
+    "start": 464.88,
+    "duration": 4.12
+  },
+  {
+    "text": "genuinely can't be broken up. If step",
+    "start": 466.88,
+    "duration": 4.08
+  },
+  {
+    "text": "two needs the answer from step one, no",
+    "start": 469.0,
+    "duration": 3.6
+  },
+  {
+    "text": "amount of parallel helps. Writing a",
+    "start": 470.96,
+    "duration": 3.48
+  },
+  {
+    "text": "single tight sales page is like that.",
+    "start": 472.6,
+    "duration": 3.76
+  },
+  {
+    "text": "Researching 20 competitors isn't. So,",
+    "start": 474.44,
+    "duration": 4.0
+  },
+  {
+    "text": "the honest version is this. Appadex 1.1",
+    "start": 476.36,
+    "duration": 3.96
+  },
+  {
+    "text": "makes wide jobs much faster and leaves",
+    "start": 478.44,
+    "duration": 3.44
+  },
+  {
+    "text": "deep one-track jobs about where they",
+    "start": 480.32,
+    "duration": 3.36
+  },
+  {
+    "text": "were. Good news is most of the work",
+    "start": 481.88,
+    "duration": 3.96
+  },
+  {
+    "text": "eating your week is wide. Research,",
+    "start": 483.68,
+    "duration": 3.88
+  },
+  {
+    "text": "comparing options, going through a big",
+    "start": 485.84,
+    "duration": 3.48
+  },
+  {
+    "text": "pile of documents, checking a lot of",
+    "start": 487.56,
+    "duration": 3.6
+  },
+  {
+    "text": "things. Those are all wide. Where does",
+    "start": 489.32,
+    "duration": 3.72
+  },
+  {
+    "text": "this go? Look at the direction, not the",
+    "start": 491.16,
+    "duration": 3.96
+  },
+  {
+    "text": "model. A year ago, an AI agent could",
+    "start": 493.04,
+    "duration": 3.879
+  },
+  {
+    "text": "handle a task that took a few minutes",
+    "start": 495.12,
+    "duration": 3.52
+  },
+  {
+    "text": "before it lost the plot. Then it was 30",
+    "start": 496.919,
+    "duration": 3.241
+  },
+  {
+    "text": "minutes. Now we've got systems that",
+    "start": 498.64,
+    "duration": 3.44
+  },
+  {
+    "text": "break work into pieces, run them side by",
+    "start": 500.16,
+    "duration": 3.759
+  },
+  {
+    "text": "side, keep a shared picture updated",
+    "start": 502.08,
+    "duration": 3.76
+  },
+  {
+    "text": "live, and take corrections mid-run. The",
+    "start": 503.919,
+    "duration": 3.481
+  },
+  {
+    "text": "jobs are getting longer, the teams are",
+    "start": 505.84,
+    "duration": 3.24
+  },
+  {
+    "text": "getting wider, and the checking points",
+    "start": 507.4,
+    "duration": 3.2
+  },
+  {
+    "text": "are getting further apart. Follow that",
+    "start": 509.08,
+    "duration": 3.079
+  },
+  {
+    "text": "line for another year. You're not going",
+    "start": 510.6,
+    "duration": 3.76
+  },
+  {
+    "text": "to be typing questions into a box,",
+    "start": 512.159,
+    "duration": 4.241
+  },
+  {
+    "text": "you're going to be reviewing work that",
+    "start": 514.36,
+    "duration": 3.72
+  },
+  {
+    "text": "ran while you were asleep, approving",
+    "start": 516.4,
+    "duration": 3.4
+  },
+  {
+    "text": "some, sending some back, and starting",
+    "start": 518.08,
+    "duration": 3.44
+  },
+  {
+    "text": "the next round. That's a manager's day.",
+    "start": 519.8,
+    "duration": 3.919
+  },
+  {
+    "text": "Which the people who do best with this",
+    "start": 521.52,
+    "duration": 3.88
+  },
+  {
+    "text": "aren't necessarily the technical ones.",
+    "start": 523.719,
+    "duration": 3.361
+  },
+  {
+    "text": "They're the ones who already know how to",
+    "start": 525.4,
+    "duration": 4.0
+  },
+  {
+    "text": "hand out work, set standards, and check",
+    "start": 527.08,
+    "duration": 4.28
+  },
+  {
+    "text": "quality. If that's you, and you've been",
+    "start": 529.4,
+    "duration": 3.84
+  },
+  {
+    "text": "feeling behind on AI because you're not",
+    "start": 531.36,
+    "duration": 3.56
+  },
+  {
+    "text": "technical, you're actually holding the",
+    "start": 533.24,
+    "duration": 3.84
+  },
+  {
+    "text": "exact skill that's about to matter most.",
+    "start": 534.92,
+    "duration": 4.0
+  },
+  {
+    "text": "You just need the setup around it. And",
+    "start": 537.08,
+    "duration": 3.32
+  },
+  {
+    "text": "that's what we've built in the AI Profit",
+    "start": 538.92,
+    "duration": 2.88
+  },
+  {
+    "text": "Boardroom. We've got a step-by-step",
+    "start": 540.4,
+    "duration": 3.4
+  },
+  {
+    "text": "tutorial going live on setting up your",
+    "start": 541.8,
+    "duration": 4.28
+  },
+  {
+    "text": "first Appadex-style agent team, how to",
+    "start": 543.8,
+    "duration": 3.96
+  },
+  {
+    "text": "write the brief, how to split the work",
+    "start": 546.08,
+    "duration": 3.24
+  },
+  {
+    "text": "so agents don't trip over each other,",
+    "start": 547.76,
+    "duration": 3.24
+  },
+  {
+    "text": "and how to get one running deep search",
+    "start": 549.32,
+    "duration": 2.88
+  },
+  {
+    "text": "on your market every single morning",
+    "start": 551.0,
+    "duration": 2.68
+  },
+  {
+    "text": "before you're up. There's a prompt",
+    "start": 552.2,
+    "duration": 3.4
+  },
+  {
+    "text": "library with ready-made briefs for lead",
+    "start": 553.68,
+    "duration": 3.64
+  },
+  {
+    "text": "research, follow-up sequences, and",
+    "start": 555.6,
+    "duration": 3.36
+  },
+  {
+    "text": "content, so you're not starting from a",
+    "start": 557.32,
+    "duration": 3.519
+  },
+  {
+    "text": "blank page. Four live coaching calls",
+    "start": 558.96,
+    "duration": 3.28
+  },
+  {
+    "text": "every week where you can share your",
+    "start": 560.839,
+    "duration": 3.201
+  },
+  {
+    "text": "screen and we'll debug your agent setup",
+    "start": 562.24,
+    "duration": 3.4
+  },
+  {
+    "text": "with you. And a member map so you can",
+    "start": 564.04,
+    "duration": 3.2
+  },
+  {
+    "text": "find the people near you already doing",
+    "start": 565.64,
+    "duration": 3.56
+  },
+  {
+    "text": "this. Business owners, someone's always",
+    "start": 567.24,
+    "duration": 3.56
+  },
+  {
+    "text": "online. Link in the description and",
+    "start": 569.2,
+    "duration": 2.84
+  },
+  {
+    "text": "comments, or head to",
+    "start": 570.8,
+    "duration": 3.24
+  },
+  {
+    "text": "aiprofitboardroom.com.",
+    "start": 572.04,
+    "duration": 3.84
+  },
+  {
+    "text": "And if you want the full process, the",
+    "start": 574.04,
+    "duration": 5.24
+  },
+  {
+    "text": "SOPs, and 100-plus AI use cases like",
+    "start": 575.88,
+    "duration": 5.76
+  },
+  {
+    "text": "this one, join the AI Success Lab. It's",
+    "start": 579.28,
+    "duration": 3.84
+  },
+  {
+    "text": "free. Links are in the comments and",
+    "start": 581.64,
+    "duration": 3.08
+  },
+  {
+    "text": "description. You'll get all the notes",
+    "start": 583.12,
+    "duration": 3.0
+  },
+  {
+    "text": "from this video in there, plus a",
+    "start": 584.72,
+    "duration": 3.12
+  },
+  {
+    "text": "community of 75,000 members who are",
+    "start": 586.12,
+    "duration": 5.04
+  },
+  {
+    "text": "crushing it with AI right now.",
+    "start": 587.84,
+    "duration": 3.32
+  }
+]

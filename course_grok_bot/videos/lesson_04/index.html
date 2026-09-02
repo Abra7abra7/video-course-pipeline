@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Lekcia 4: Učenie skillov a rutiny</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #06080d;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .video-canvas {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      background: radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.22) 0%, transparent 50%),
+                  radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.18) 0%, transparent 50%),
+                  #06080d;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 80px;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .course-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+    }
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      background: #06b6d4;
+      border-radius: 50%;
+      box-shadow: 0 0 14px #06b6d4;
+    }
+    .author-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 22px;
+      color: #94a3b8;
+    }
+    .author-badge strong {
+      color: #fff;
+    }
+
+    /* Dynamic Scene Container */
+    .scene-viewport {
+      position: relative;
+      flex: 1;
+      margin: 40px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .scene-card {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .scene-card.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scene-pill {
+      display: inline-block;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: #67e8f9;
+      padding: 8px 24px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .scene-heading {
+      font-size: 56px;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 1400px;
+    }
+
+    .scene-subheading {
+      font-size: 28px;
+      color: #94a3b8;
+      max-width: 1100px;
+      line-height: 1.5;
+      margin-bottom: 40px;
+    }
+
+    /* Card Visual Layouts */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      width: 100%;
+      max-width: 1400px;
+    }
+
+    .feature-card {
+      background: rgba(18, 24, 38, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 36px 30px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    .feature-desc {
+      font-size: 19px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .stat-box {
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.15), rgba(18, 24, 38, 0.85));
+      border: 2px solid rgba(99, 102, 241, 0.5);
+      border-radius: 32px;
+      padding: 50px 80px;
+      box-shadow: 0 0 50px rgba(99, 102, 241, 0.3);
+      display: inline-block;
+    }
+    .stat-big {
+      font-size: 110px;
+      font-weight: 900;
+      color: #38bdf8;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+      text-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+    }
+    .stat-text {
+      font-size: 30px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 15px;
+    }
+
+    .quote-box {
+      background: rgba(99, 102, 241, 0.12);
+      border-left: 6px solid #6366f1;
+      border-radius: 0 24px 24px 0;
+      padding: 40px 50px;
+      font-size: 34px;
+      font-weight: 700;
+      color: #e2e8f0;
+      max-width: 1200px;
+      line-height: 1.5;
+    }
+
+    /* Bottom Control Bar */
+    .bottom-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 20, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 16px 32px;
+      backdrop-filter: blur(16px);
+    }
+
+    .playback-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .btn-play {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #6366f1;
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+    }
+    .time-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      color: #94a3b8;
+    }
+
+    .progress-track {
+      flex: 1;
+      margin: 0 30px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366f1, #06b6d4);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="video-canvas" id="canvas">
+    <div class="grid-lines"></div>
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="course-badge">
+        <span class="pulse-dot"></span>
+        Grok Bot AI Agent Tím • Lekcia 4
+      </div>
+      <div class="author-badge">
+        Lektor: <strong>Marian Stančík</strong> | ElevenLabs Custom Voice
+      </div>
+    </header>
+
+    <!-- Scene Container -->
+    <main class="scene-viewport" id="scene-viewport">
+      
+      <div class="scene-card" id="scene-0">
+        <div class="scene-pill">Revolučná funkcia</div>
+        <h2 class="scene-heading">Teach a Task: Žiadne zložité prompty</h2>
+        <p class="scene-subheading">Zapneš nahrávanie obrazovky, spravíš úlohu a bot sa ju naučí.</p>
+        <div class="quote-box">Zapneš nahrávanie obrazovky, spravíš úlohu a bot sa ju naučí.</div>
+      </div>
+    
+
+      <div class="scene-card" id="scene-1">
+        <div class="scene-pill">Učenie preferencií</div>
+        <h2 class="scene-heading">Bot si pamätá tvoj osobný štýl</h2>
+        <p class="scene-subheading">Keď opravíš detail, nabudúce ho spraví automaticky správne.</p>
+        <div class="quote-box">Keď opravíš detail, nabudúce ho spraví automaticky správne.</div>
+      </div>
+    
+
+      <div class="scene-card" id="scene-2">
+        <div class="scene-pill">Automatizácia v cloude</div>
+        <h2 class="scene-heading">Rutiny: Bežia aj keď spíš</h2>
+        <p class="scene-subheading">Triggery na základe času alebo prichádzajúcich udalostí.</p>
+        <div style="display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 1000px;">
+            <div class="feature-card" style="display: flex; align-items: center; gap: 20px; text-align: left; padding: 24px 30px;">
+              <div style="font-size: 40px;">☀️</div>
+              <div>
+                <div style="font-size: 22px; font-weight: 800; color: #38bdf8;">08:00 Ráno</div>
+                <div style="font-size: 20px; color: #e2e8f0; margin-top: 4px;">Priprav ranný sumár prioritných emailov</div>
+              </div>
+            </div>
+        
+            <div class="feature-card" style="display: flex; align-items: center; gap: 20px; text-align: left; padding: 24px 30px;">
+              <div style="font-size: 40px;">💶</div>
+              <div>
+                <div style="font-size: 22px; font-weight: 800; color: #38bdf8;">Udalosť: Faktúra > 1000€</div>
+                <div style="font-size: 20px; color: #e2e8f0; margin-top: 4px;">Automaticky priprav na schválenie</div>
+              </div>
+            </div>
+        
+            <div class="feature-card" style="display: flex; align-items: center; gap: 20px; text-align: left; padding: 24px 30px;">
+              <div style="font-size: 40px;">📊</div>
+              <div>
+                <div style="font-size: 22px; font-weight: 800; color: #38bdf8;">Pondelok 09:00</div>
+                <div style="font-size: 20px; color: #e2e8f0; margin-top: 4px;">Vygeneruj týždenný report stavu projektov</div>
+              </div>
+            </div>
+        </div>
+      </div>
+    
+
+      <div class="scene-card" id="scene-3">
+        <div class="scene-pill">Reálny príklad z xAI</div>
+        <h2 class="scene-heading">Autonómny Feedback Loop</h2>
+        <p class="scene-subheading">Boti sami opravujú nahlásené bugy ešte skôr, než človek otvorí ticket.</p>
+        <div class="quote-box">💡 "To už nie je obyčajná automatizácia. To je plnohodnotný digitálny zamestnanec."</div>
+      </div>
+    
+    </main>
+
+    <!-- Bottom Player Bar -->
+    <footer class="bottom-bar">
+      <div class="playback-info">
+        <button class="btn-play" id="btn-play">▶</button>
+        <span class="time-code" id="time-display">0:00 / 1:13</span>
+      </div>
+
+      <div class="progress-track" id="progress-track">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div style="font-size: 18px; color: #64748b; font-weight: 600;">
+        1080p Master Video
+      </div>
+    </footer>
+
+    <audio id="audio" src="../audio/lekcia_04_ucenie_skillov.mp3" preload="auto"></audio>
+  </div>
+
+  <script>
+    const scenesData = [{"time_start": 0, "time_end": 18, "badge": "Revolučná funkcia", "heading": "Teach a Task: Žiadne zložité prompty", "subheading": "Zapneš nahrávanie obrazovky, spravíš úlohu a bot sa ju naučí.", "visual_type": "teach_task", "steps": [{"title": "1. Spusť nahrávanie", "icon": "🔴"}, {"title": "2. Vykonaj úlohu ručne", "icon": "🖱️"}, {"title": "3. Bot si uloží skill", "icon": "🧠"}]}, {"time_start": 18, "time_end": 35, "badge": "Učenie preferencií", "heading": "Bot si pamätá tvoj osobný štýl", "subheading": "Keď opravíš detail, nabudúce ho spraví automaticky správne.", "visual_type": "preferences", "examples": ["\"Faktúry radšej spracúvam večer, nie ráno\"", "\"Formát tabuľky vždy zoradiť podľa dátumu\"", "\"Tón komunikácie: priateľský ale priamy\""]}, {"time_start": 35, "time_end": 55, "badge": "Automatizácia v cloude", "heading": "Rutiny: Bežia aj keď spíš", "subheading": "Triggery na základe času alebo prichádzajúcich udalostí.", "visual_type": "routines_list", "routines": [{"time": "08:00 Ráno", "action": "Priprav ranný sumár prioritných emailov", "icon": "☀️"}, {"time": "Udalosť: Faktúra > 1000€", "action": "Automaticky priprav na schválenie", "icon": "💶"}, {"time": "Pondelok 09:00", "action": "Vygeneruj týždenný report stavu projektov", "icon": "📊"}]}, {"time_start": 55, "time_end": 74, "badge": "Reálny príklad z xAI", "heading": "Autonómny Feedback Loop", "subheading": "Boti sami opravujú nahlásené bugy ešte skôr, než človek otvorí ticket.", "visual_type": "quote_highlight", "quote": "\"To už nie je obyčajná automatizácia. To je plnohodnotný digitálny zamestnanec.\""}];
+    const audio = document.getElementById('audio');
+    const btnPlay = document.getElementById('btn-play');
+    const timeDisplay = document.getElementById('time-display');
+    const progressBar = document.getElementById('progress-bar');
+    const progressTrack = document.getElementById('progress-track');
+    const sceneElements = document.querySelectorAll('.scene-card');
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    function updateScene(currentTime) {
+      scenesData.forEach((s, idx) => {
+        const el = document.getElementById(`scene-${idx}`);
+        if (currentTime >= s.time_start && currentTime < s.time_end) {
+          if (!el.classList.contains('active')) {
+            sceneElements.forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+            gsap.fromTo(el, { opacity: 0, y: 30, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" });
+          }
+        }
+      });
+    }
+
+    audio.ontimeupdate = () => {
+      const cur = audio.currentTime;
+      const dur = audio.duration || 73.2;
+      timeDisplay.innerText = `${formatTime(cur)} / ${formatTime(dur)}`;
+      progressBar.style.width = `${(cur / dur) * 100}%`;
+      updateScene(cur);
+    };
+
+    btnPlay.onclick = () => {
+      if (audio.paused) {
+        audio.play();
+        btnPlay.innerText = '⏸';
+      } else {
+        audio.pause();
+        btnPlay.innerText = '▶';
+      }
+    };
+
+    progressTrack.onclick = (e) => {
+      const rect = progressTrack.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = clickX / rect.width;
+      audio.currentTime = pct * (audio.duration || 73.2);
+    };
+
+    audio.onended = () => {
+      btnPlay.innerText = '▶';
+    };
+
+    // Init first scene
+    updateScene(0);
+  </script>
+</body>
+</html>

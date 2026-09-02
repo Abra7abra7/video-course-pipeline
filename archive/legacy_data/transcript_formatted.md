@@ -1,0 +1,107 @@
+[00:01] So, last week I did a video kind of introducing the Hermes Agent Desktop plugin. And you saw me build a couple of these. I have this baseball one. Um I also made a a weather one. But I wanted to do a video exclusively looking deeper at this plugin cuz I think there's a lot you can do with it.
+
+[00:21] I feel like I've been using the Hermes Agent Desktop app more and more for projects and setting up different workflows. So, utilizing this plugin, I think, is really useful. So, first of all, I need to build a plugin to present the slides cuz I made a little slide deck kind of explaining what you can make and what you can't make with the plugin SDK.
+
+[00:43] Um so, I'm saying, "Can you make a plugin to present slides? If I have a You should have a file open button. And if I click on HTML files in the panes, these are all panes, I should automatically pop up there. Put it in the sessions bar under Kanban." So, just to start, we're going to build this plugin so then I can make my presentation about plugins.
+
+[01:03] Okay, you could see it's working and it just popped up on the side here. It says slides. We'll see, present slides. Okay. So, there you go. Loaded um this slide deck in and we have our our slides in our slides plugin. Yeah. So, in today's video, I'm going to kind of describe what the Hermes Desktop plugin SDK is, what kind of positions uh what kind of data you can present, uh what kind of data you probably shouldn't present, uh show you where on this Desktop app you can place uh plugins cuz
+
+[01:38] there's actually 25 different locations that I found. And I'm going to show you all of them with an actual plugin. And then we're going to build out some some actual plugins to see how far we can push this. I'm going to try to make a plugin for Spotify, a trading terminal, as well as some others. We're going to try to really push it. So, we'll see what we can make without breaking my my app here.
+
+[01:59] So, let's get started. And if you'd like more Tomb's AI Garage, please consider clicking that join button and becoming a member. Team Garage members get early access to new videos, while Team Garage Live members get that, plus a weekly live stream with me to ask questions, chat about AI, and just watch me build live.
+
+[02:16] Thank you to everyone watching this for your support. It motivates me to keep making Tomb's AI Garage the best place on YouTube to learn about AI. Now, back to the video. Uh so, there's a lot you can do with this desktop plugin. Um and the one thing is that there's a lot of different places you can place it around the desktop app itself.
+
+[02:34] So, if it's something that requires a full UI, it it can be in the panes itself. If you just needs title title and status, you can use that for compact UI, popovers, like you saw this. This is considered a popover, uh on the composer, and then on the route and sidebar for applications.
+
+[02:51] These different positions also kind of affect their type. So, let me show you. This is the plugin that I made that we're going to move around, and this is called the placement playground. So, we're going to move this around the screen, around the app, and you'll be able to see all the positions.
+
+[03:06] And this plugin's only purpose is to tell you what position it's in, and then we can move it to the next position. Um but so, this is the pane, main pane. And next position. So, this is now the pane to the left. So, this is over here in the sidebar, uh which usually has sessions, right? It has a tab up here for placement playground. And that's pane left.
+
+[03:31] So, the next position is pane right, as you might imagine. So, if I open up this right sidebar, you could see it's usually the the folder explorer, right? Um but now we have placement playground here. So, you can also collapse this as well if you want along the side here, and then just click it to expand it.
+
+[03:50] So, the next position is pane top. So, this brings it back up to the top. Um basically the same as the main one. Um in this case cuz we don't have bottom and top panes, but this would bring it to the top position there. And like I said, for pane plugins, this is going to show you a full UI. So, you have much more of the screen.
+
+[04:11] Next position. So, this is the bottom, right? Um so, this in my setup, it's in the terminal right down here. You see it? So, it depends on how you have this set up. If you check out uh default or you check out layouts up here, I have it on the default. So, on the default, it's going to be kind of on the side on the right side here under terminal.
+
+[04:34] But, this is placement playground. Pane bottom. So, next one. So, this is workspace top. So, this is on top of the workspace. You can see these are the panes we're working in. All right? All the tabs I had open. And then, it just goes on top right there. It's kind of docked to the top.
+
+[04:54] So, if I close that, um it collapses and I can open it back up. So, this is workspace top docked. Docked means um it's just set in that one position. Next position. Uh so, workspace bottom, right? Um so, same thing. Workspace bottom docked on the bottom of what was our workspace, which is this, these couple session tabs that I have open.
+
+[05:22] Next one is dock workspace left. Same thing, right? It's to the left of these these tabs, this workspace. And once again, I can collapse it or open it. Close that one. Uh so, next position is dock workspace right. Which as you might might imagine is over here.
+
+[05:48] On the right side. Next position. Is workspace center. So that moved it back into the middle here. Next position. Is status bar left. And this is getting into some more advanced. This one previously this had been showing kind of full UI's, right? So this one if you could see down here placement. So this is where it it goes down here in the status bar on the left side of the status bar along with this right the um the file manager and the gateway
+
+[06:23] status. So if I click it again it's going to move it the next position which is status bar right. Moves over here. Next placement title bar left. So this is up the top part is called the title bar as you can see. This little symbol this little icon is our plugin.
+
+[06:42] So it changes kind of forms, right? When you saw it down in the workspace it had the full placement playground title. When it was down here it was just at placement and now up here it's just an icon similar to these icons up here for settings and sound and everything.
+
+[06:57] So if I click it it's going to move to the next placement which is title bar center. So it moves to the center. And then the next one. Is as you imagine title bar right. So it moves over to the right. So this would be something you could have up here and click it and have some uh pop up or something to that effect. So this one is floating, right?
+
+[07:18] This is pop over top I should say. But this is when you have something floating. And then the pop up pop over goes to the top position. Next position. Is pop over bottom. You have the float wherever position it is and then it pops to the bottom. Next position.
+
+[07:36] Pop over left same thing. Pops over to the left. Pop over right. And next one, next position. So, next is the composer top. So, this is another interesting one. Um we got our composer here. Let me open this in new session so it's not con- Um so, this is placement. So, it sits right here on the top of the composer.
+
+[08:03] So, this is something for very compact UI, maybe just like a status, or something like that, not a full not a full plugin. So, next one, composer bottom. So, same thing on the bottom of the composer, it's placed down here. Next one, composer leading. So, this goes kind of here before the where you enter the prompt.
+
+[08:27] And composer actions, so it moves to the right. Um next is composer attachments. So, this is actually you may ask, where is it now? It's here. Right there, when you open the attachments. And then it adds it um to the the prompt bar itself. Okay, so the next one, and the final one, is moving it to the side. So, this is the workspace route and sidebar, which is what I had the slides on.
+
+[09:00] Um and this one is pretty convenient cuz it kind of covers whatever sessions were open. You can go back to your sessions and they're all still here, right? Um but then you click this and it opens it like this, like we had for the slides. Uh so, that's it. That was my placement playground to show you all the different ways you can place it, uh depending on its function, right?
+
+[09:20] And some of these can be combined. So, like the this weather one was obviously to the to the right of the status bar, but it is a popover, right? When I click it, it has that popover effect going up. Uh so, back to the slides. And I talked about this a little bit in placement area, but form follows the job, right? You want to decide the form based on what the plugin is meant to do.
+
+[09:44] So, you could choose it for it to be compact if it's just ambient awareness, right? One factor, one action that should always be nearby. Something that's anchored is something that um has more detail without leaving the current conversation for quick control.
+
+[09:57] Something like media is useful. Um something like this in a plugin or a popover is useful. And then um expansive is for full applications like this. This is um like search navigation, dense data, or multi-step workflows. And then declarative for host-owned UI.
+
+[10:18] So, this is um you supplying structured data, and then Hermes decides how it appears. So, a couple of the ways that um you can adjust the form based on exactly what you want the plugin to do. So, where does the plugin's power come from? So, there's a massive different ways you can adjust this. Um you can have it come from Hermes state itself, right? If you want to have a plugin that tells you about the current state of your agent or your workspace.
+
+[10:45] Um you can use Hermes itself as a gateway. And that can have information on sessions and cron jobs, Kanban, stuff like that. Um Kanban is a good example of one of these cuz it is about Hermes itself, what's happening. You can use a backend. You can attach a backend for um databases, files, native libraries, web sockets.
+
+[11:06] And then you can use a browser media for to render rich output. So, that's for images, audio, video, um and the like. So, a renderer-only plugin is strong for UI. A plugin plus a Python backend can become a real product. So, what a plugin cannot do. So, this is important as well to understand. You're not going to have direct access to arbitrary nodes or native APIs. You can't bypass external security, obviously.
+
+[11:31] Um you can't use unknown shell positions. The plugin can only occ- occupy areas that Hermes itself consumes. So, it can't invent a new shell region with an arbitrary area name like that. Um, it's not a media store itself. So, it doesn't have unlimited binary persistence. Um, a plugin storage is just a small JSON state. It's not a video library. It's not a database on its own. It can connect to a database, but on its own it is just a UI element for that.
+
+[11:57] It's not always running. Um, it's not going to work once you close the desktop app. It's only part of the app itself. And it's the wrong layer for privileged native systems. So, a backend expands capability does not remove uh legal, security, licensing, or platform boundaries, or anything like that.
+
+[12:16] So, this is the scalable architecture we're talking about. You can have a Hermes desktop plugin for as a UI connected um, to some kind of backend, which is connected to some specialist service or app. Um, so we might try this video editing one to connect the Hermes desktop UI to FFmpeg service, right?
+
+[12:35] Uh, we'll see how well that one works. Um, so if it can be expressed as data controls or agent contacts, it belongs naturally in a Hermes plugin. If it requires a specialist engine, keep the engine external and make Hermes its intelligent control service.
+
+[12:49] So, I hope that gives you kind of an idea about what the the plugin actually is and what you can build with it. Um, so getting back into it, let's actually make some, or at least try. Okay, first I think we're going to try to build the trading terminal. So, I said to Hermes, um, let's try to build the trading terminal first. What would you suggest for form and placement?
+
+[13:09] Um, so it's going to be on the sidebar for markets or trading. This is where the actual work lives. Um, so this is the full route like the slides, which probably makes sense. Or a status bar item for ambient state, like if it's down here, maybe just a ticker, right?
+
+[13:25] And then, so it's actually going try to use three surface design. And then a popover for a quick check and control from the status bar. Okay. So, let's try this. Okay. Uh try to do it uh using hyper liquid charts or other providers. Okay. So, I'm just going to let it work.
+
+[13:57] Um and then I'll let you know how long this takes. And I'll show you the final product. Or if it fails, I'll show you that, too. Okay. So, you can already see it's it's made markets here. And then down here there's a a tag for Bitcoin. So, it is a read-only hyper liquid smart plug-in.
+
+[14:16] Um has a couple different uh crypto tickers, it appears. So, if I click markets here, there we go for Bitcoin. 1 hour. Can do 4 hour. Uh we can do select ETH instead. And hype. So, there you go. It has a little watch list. You can customize this. This was just one shot.
+
+[14:38] It has the order book book data. It has current prices, right? And then it changed once I selected one of these. It changed on the bottom. Um so, if I go back here, if I click this, it'll go right to the uh to this tab. Um so, this is even though there's two sections for it, this is actually just one plug-in.
+
+[15:05] So, you can adjust the time period as well. 15 minutes. 1 hour. Or 4 hours. See if I can make the chart a little bit nicer. But, it has this watch list. If I click this, then it'll automatically go to that. See if I can get a proper TradingView chart in here.
+
+[15:25] And there we go. That's much better. So, we got a proper TradingView chart here. So, there we go. That's the markets plug-in. Looks pretty good. So, you don't have to I usually have TradingView on the side to check the markets, but now I just click here.
+
+[15:43] And um you can obviously change this. It doesn't have to be crypto. It can be stocks as well or currencies, anything you like. Okay, so the next one is I want to do one with Spotify to have cuz I often will listen to music as I am live coding or whatever I'm doing. So, I want kind of a popover on the bottom like this, the Bitcoin or the uh weather one.
+
+[16:04] So, that I can quickly search for artist and then play music right inside the app itself. This one's going to require a little bit more work cuz it requires uh authentication, I think. But I think there was already a built-in plug-in, maybe not plug-in, but some kind of integration with Hermit Sessions.
+
+[16:20] And we just need to kind of pull into the app itself. But let's see. Okay, so the the plug-in itself is connected. I just need to to authorize it. Uh so, let me do that separately. Okay, I went through that process of logging into my Spotify account. You have to create an app, but only takes a second to do it.
+
+[16:40] And Hermit will guide you through that process. Okay, it is authorized. See if we can listen to some music. Okay, so we got it to be connected here. Um so, you just search for a song and you can play it in the backgrounds, see? I have control over it here.
+
+[17:01] Uh you can change the song. Change the band, search for a different band, right? So. I'll search for a different artist. There you go. >> How many roads must >> So there you go. Yeah, we have a nice little Spotify app. You can play different songs, different music. The one thing is that you do need the Spotify desktop app open. So it's more of a controller than it is playing
+
+[17:34] directly here. It's playing in the app, but you can control it from here. So it's a little bit of a limitation, but uh for my purposes, I think that that works out pretty well. The next one I'm going to try to do is an SNES emulator to um play some SNES games for if you have ROMs for them.
+
+[17:55] And as you're working in your session, you might want to play some games while while your agent is working. So I thought that might be a fun plugin as well. Okay, so we can see over here and let's load our ROM file. Here we go. Legally uh acquired, of course.
+
+[18:20] There we go. Legend of Zelda: A Link to the Past. So this is uh built in using emulator.js. And we can can play. Here we go. Very nostalgic. So yeah, you can play a game like this. Um you can even pause it in mid-game. And then continue to work on your session.
+
+[18:48] Back and continue your game. Uh so you can get in some uh some old-school gaming as you work in Hermetic in the other session. So you can just keep a keep an eye on what's happening here. If they're still working, you can play your game. Um and if not, you can uh continue continue trying to save the princess here.
+
+[19:13] Uh so that's going to be it. We made a couple different plugins. We did a markets plugin. Uh we did our Spotify plugin. And now our SNES emulator plugin. Um so let me know um what kind of plugins you are trying to make. I think I'll probably try to open source all of these once I have them a little bit more polished.
+
+[19:35] Um so you can try them out yourself. So check that out at my GitHub at Tombstone Studio. And check my X. I'll probably announce uh the exact name of the the directory. So that's going to be it for this video. Uh thank you for watching.

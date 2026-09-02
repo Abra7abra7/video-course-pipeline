@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="sk" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #05070c;
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+      }
+
+      .canvas {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: radial-gradient(
+            circle at 50% 12%,
+            rgba(239, 68, 68, 0.22) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at 85% 85%,
+            rgba(99, 102, 241, 0.25) 0%,
+            transparent 50%
+          ),
+          #05070c;
+        overflow: hidden;
+      }
+
+      .grid-pattern {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 50px 50px;
+        pointer-events: none;
+      }
+
+      /* Top Header */
+      .top-badge {
+        position: absolute;
+        top: 75px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(239, 68, 68, 0.45);
+        padding: 14px 34px;
+        border-radius: 999px;
+        backdrop-filter: blur(16px);
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fca5a5;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        z-index: 50;
+      }
+
+      .pulse-dot {
+        width: 14px;
+        height: 14px;
+        background: #ef4444;
+        border-radius: 50%;
+        box-shadow: 0 0 16px #ef4444;
+      }
+
+      /* Scenes */
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 90px 50px;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .headline-main {
+        font-family: "Outfit", sans-serif;
+        font-size: 68px;
+        font-weight: 900;
+        line-height: 1.1;
+        text-align: center;
+        background: linear-gradient(135deg, #ffffff 40%, #fca5a5 75%, #ef4444 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 16px;
+      }
+
+      .sub-caption {
+        font-size: 28px;
+        color: #cbd5e1;
+        text-align: center;
+        max-width: 880px;
+        line-height: 1.4;
+        margin-bottom: 35px;
+      }
+
+      /* Mockup Window */
+      .window-frame {
+        position: relative;
+        width: 920px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 35px 70px rgba(0, 0, 0, 0.75),
+          0 0 45px rgba(239, 68, 68, 0.2);
+        backdrop-filter: blur(20px);
+      }
+
+      .window-header {
+        height: 52px;
+        background: rgba(30, 41, 59, 0.75);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+      }
+
+      .window-dots {
+        display: flex;
+        gap: 10px;
+      }
+
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+      }
+      .dot.red { background: #ef4444; }
+      .dot.yellow { background: #f59e0b; }
+      .dot.green { background: #10b981; }
+
+      .window-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #94a3b8;
+      }
+
+      .window-img {
+        width: 100%;
+        height: 520px;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Key Insight Card */
+      .insight-card {
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 26px;
+        padding: 30px 36px;
+        width: 920px;
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      .insight-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        flex-shrink: 0;
+        box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+      }
+
+      .insight-text h3 {
+        font-family: "Outfit", sans-serif;
+        font-size: 30px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+
+      .insight-text p {
+        font-size: 22px;
+        color: #cbd5e1;
+        margin-top: 6px;
+        line-height: 1.35;
+      }
+
+      /* Grid 2x2 for Tips / Actions */
+      .action-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        width: 920px;
+      }
+
+      .action-box {
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 22px;
+        padding: 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        backdrop-filter: blur(12px);
+      }
+
+      .action-box h4 {
+        font-family: "Outfit", sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        color: #f8fafc;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .action-box p {
+        font-size: 20px;
+        color: #94a3b8;
+        line-height: 1.35;
+      }
+
+      /* Outro Box */
+      .outro-box {
+        background: linear-gradient(
+          135deg,
+          rgba(239, 68, 68, 0.25) 0%,
+          rgba(99, 102, 241, 0.25) 100%
+        );
+        border: 1px solid rgba(239, 68, 68, 0.45);
+        border-radius: 36px;
+        padding: 70px 50px;
+        text-align: center;
+        width: 900px;
+        box-shadow: 0 0 60px rgba(239, 68, 68, 0.3);
+      }
+
+      .cta-button {
+        margin-top: 40px;
+        background: linear-gradient(135deg, #ef4444, #6366f1);
+        color: #ffffff;
+        padding: 24px 56px;
+        border-radius: 22px;
+        font-size: 30px;
+        font-weight: 800;
+        font-family: "Outfit", sans-serif;
+        display: inline-block;
+        box-shadow: 0 12px 35px rgba(239, 68, 68, 0.5);
+      }
+
+      /* Talking Avatar Widget */
+      .avatar-widget {
+        position: absolute;
+        bottom: 60px;
+        right: 60px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1.5px solid rgba(239, 68, 68, 0.5);
+        padding: 14px 24px 14px 16px;
+        border-radius: 999px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(239, 68, 68, 0.3);
+        z-index: 60;
+      }
+
+      .avatar-circle {
+        position: relative;
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        border: 3px solid #ef4444;
+        background: linear-gradient(135deg, #450a0a, #7f1d1d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .avatar-face {
+        font-size: 50px;
+        user-select: none;
+      }
+
+      .avatar-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .avatar-name {
+        font-family: "Outfit", sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: #f8fafc;
+      }
+
+      .avatar-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fca5a5;
+      }
+
+      .audio-bars {
+        display: flex;
+        gap: 3px;
+        align-items: flex-end;
+        height: 14px;
+      }
+
+      .bar {
+        width: 3px;
+        background: #ef4444;
+        border-radius: 2px;
+      }
+
+      .footer-note {
+        position: absolute;
+        bottom: 80px;
+        left: 60px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      class="canvas"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="90"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div class="grid-pattern"></div>
+
+      <!-- Top Badge -->
+      <div class="top-badge">
+        <div class="pulse-dot"></div>
+        <span>THE DIARY OF A CEO × PODCAST DEEP-DIVE</span>
+      </div>
+
+      <!-- SCENE 1 (0s - 17s): INTRO & WARNING -->
+      <div id="scene1" class="scene">
+        <h1 class="headline-main">VAROVANIE PRE<br />ZÁPADNÚ SPOLOČNOSŤ</h1>
+        <p class="sub-caption">
+          Konstantin Kisin: Naši lídri stratili kontrolu a čelíme najväčšej skúške
+        </p>
+
+        <div class="window-frame">
+          <div class="window-header">
+            <div class="window-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="window-title">The Diary Of A CEO — Episode Highlights</span>
+            <span style="font-size: 16px; color: #ef4444">● Deep Warning</span>
+          </div>
+          <img class="window-img" src="assets/kisin_intro.jpg" alt="Intro" />
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon">⚠️</div>
+          <div class="insight-text">
+            <h3>Tektonické zmeny inštitúcií</h3>
+            <p>Zlyhávanie politických elít a ignorovanie reality vytvára nebezpečné napätie.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 2 (17s - 35s): INSTITUTIONS & ECONOMY -->
+      <div id="scene2" class="scene">
+        <h2 class="headline-main">1. KRÍZA DÔVERY A EKONOMIKY</h2>
+        <p class="sub-caption">
+          Ignorovanie problémov strednej triedy vedie k radikalizácii
+        </p>
+
+        <div class="window-frame">
+          <div class="window-header">
+            <div class="window-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="window-title">Konstantin Kisin: Civil Unrest & Trust</span>
+            <span style="font-size: 16px; color: #f59e0b">● Economic Pressure</span>
+          </div>
+          <img class="window-img" src="assets/kisin_leaders.jpg" alt="Leaders" />
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706)">📉</div>
+          <div class="insight-text">
+            <h3>Rozpad sociálneho zmieru</h3>
+            <p>Inflácia a prehlbujúce sa rozdiely ničia dôveru občanov v štátne inštitúcie.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 3 (35s - 54s): AI & AUTOMATION SHOCK -->
+      <div id="scene3" class="scene">
+        <h2 class="headline-main">2. TECHNOLOGICKÝ ŠOK & AI</h2>
+        <p class="sub-caption">
+          Umelá inteligencia mení trh práce rýchlejšie, než sa stíhame adaptovať
+        </p>
+
+        <div class="window-frame">
+          <div class="window-header">
+            <div class="window-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="window-title">AI, Mass Unemployment & Future of Work</span>
+            <span style="font-size: 16px; color: #818cf8">● Cognitive Disruption</span>
+          </div>
+          <img class="window-img" src="assets/kisin_ai.jpg" alt="AI Disruption" />
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon" style="background: linear-gradient(135deg, #6366f1, #4338ca)">🤖</div>
+          <div class="insight-text">
+            <h3>Automatizácia kognitívnej práce</h3>
+            <p>Vzdelávací systém nie je pripravený na tempo nahrádzania profesií algoritmami.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 4 (54s - 72s): WEST VS CHINA & HISTORY -->
+      <div id="scene4" class="scene">
+        <h2 class="headline-main">3. ZÁPAD VS. ČÍNA & HISTÓRIA</h2>
+        <p class="sub-caption">
+          Lekcie zo Sovietskeho zväzu: Nebezpečenstvo ideologického dogmatizmu
+        </p>
+
+        <div class="window-frame">
+          <div class="window-header">
+            <div class="window-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="window-title">Lessons From USSR & The Rise of China</span>
+            <span style="font-size: 16px; color: #ef4444">● Geopolitics</span>
+          </div>
+          <img class="window-img" src="assets/kisin_china.jpg" alt="China vs West" />
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon" style="background: linear-gradient(135deg, #10b981, #047857)">🌐</div>
+          <div class="insight-text">
+            <h3>Globálna konkurencia</h3>
+            <p>Pragmatický technologický štát vyhráva nad systémami uväznenými v byrokracii.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 5 (72s - 90s): ACTIONABLE GUIDE & OUTRO -->
+      <div id="scene5" class="scene">
+        <h2 class="headline-main" style="font-size: 60px; margin-bottom: 24px;">
+          4. AKO SA PRIPRAVIŤ?
+        </h2>
+
+        <div class="action-grid">
+          <div class="action-box">
+            <h4>🧠 Vlastné zručnosti</h4>
+            <p>Učte sa technologickú gramotnosť a nezameniteľné expertízy.</p>
+          </div>
+          <div class="action-box">
+            <h4>🛡️ Finančná odolnosť</h4>
+            <p>Nespoliehajte sa na štátne garancie, budujte rezervy.</p>
+          </div>
+          <div class="action-box">
+            <h4>🤝 Silná komunita</h4>
+            <p>Udržiavajte rodinné a lokálne vzťahy v reálnom svete.</p>
+          </div>
+          <div class="action-box">
+            <h4>🎯 Mentálna disciplína</h4>
+            <p>Filtrujte informačný šum a sústreďte sa na veci pod kontrolou.</p>
+          </div>
+        </div>
+
+        <div class="outro-box" style="margin-top: 30px; padding: 40px 30px;">
+          <h3 style="font-family: 'Outfit'; font-size: 38px; font-weight: 900; margin-bottom: 12px;">
+            Sledujte pre viac analýz svetových rozhovorov
+          </h3>
+          <div class="cta-button" style="margin-top: 20px; font-size: 24px; padding: 18px 40px;">
+            Odoberajte náš kanál
+          </div>
+        </div>
+      </div>
+
+      <!-- TALKING AVATAR WIDGET -->
+      <div class="avatar-widget">
+        <div class="avatar-circle">
+          <div class="avatar-face">🎙️</div>
+        </div>
+        <div class="avatar-info">
+          <span class="avatar-name">Slovenský rozbor</span>
+          <div class="avatar-status">
+            <div class="audio-bars">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+            <span>AI Voice</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Voiceover Audio Clip -->
+      <audio
+        id="voiceover"
+        class="clip"
+        data-start="0"
+        data-duration="89.95"
+        src="assets/voiceover.mp3"
+      ></audio>
+
+      <!-- Footer Branding -->
+      <div class="footer-note">
+        THE DIARY OF A CEO × PODCAST RECAP
+      </div>
+    </div>
+
+    <!-- GSAP Master Timeline (Seek-Safe & Paused) -->
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // SCENE 1 (0s - 17s)
+      tl.set("#scene1", { autoAlpha: 1 }, 0);
+      tl.from("#scene1 .headline-main", { y: 50, opacity: 0, duration: 0.8, ease: "power3.out" }, 0.2);
+      tl.from("#scene1 .sub-caption", { y: 30, opacity: 0, duration: 0.8, ease: "power3.out" }, 0.4);
+      tl.from("#scene1 .window-frame", { scale: 0.9, opacity: 0, duration: 0.9, ease: "back.out(1.3)" }, 0.6);
+      tl.from("#scene1 .insight-card", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 1.0);
+      tl.to("#scene1", { autoAlpha: 0, y: -40, duration: 0.6, ease: "power2.in" }, 16.4);
+
+      // SCENE 2 (17s - 35s)
+      tl.set("#scene2", { autoAlpha: 1 }, 17.0);
+      tl.from("#scene2 .headline-main", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 17.2);
+      tl.from("#scene2 .sub-caption", { y: 25, opacity: 0, duration: 0.8, ease: "power3.out" }, 17.4);
+      tl.from("#scene2 .window-frame", { scale: 0.9, opacity: 0, duration: 0.8, ease: "power3.out" }, 17.6);
+      tl.from("#scene2 .insight-card", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 18.0);
+      tl.to("#scene2", { autoAlpha: 0, y: -40, duration: 0.6, ease: "power2.in" }, 34.4);
+
+      // SCENE 3 (35s - 54s)
+      tl.set("#scene3", { autoAlpha: 1 }, 35.0);
+      tl.from("#scene3 .headline-main", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 35.2);
+      tl.from("#scene3 .sub-caption", { y: 25, opacity: 0, duration: 0.8, ease: "power3.out" }, 35.4);
+      tl.from("#scene3 .window-frame", { scale: 0.9, opacity: 0, duration: 0.8, ease: "power3.out" }, 35.6);
+      tl.from("#scene3 .insight-card", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 36.0);
+      tl.to("#scene3", { autoAlpha: 0, y: -40, duration: 0.6, ease: "power2.in" }, 53.4);
+
+      // SCENE 4 (54s - 72s)
+      tl.set("#scene4", { autoAlpha: 1 }, 54.0);
+      tl.from("#scene4 .headline-main", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 54.2);
+      tl.from("#scene4 .sub-caption", { y: 25, opacity: 0, duration: 0.8, ease: "power3.out" }, 54.4);
+      tl.from("#scene4 .window-frame", { scale: 0.9, opacity: 0, duration: 0.8, ease: "power3.out" }, 54.6);
+      tl.from("#scene4 .insight-card", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 55.0);
+      tl.to("#scene4", { autoAlpha: 0, y: -40, duration: 0.6, ease: "power2.in" }, 71.4);
+
+      // SCENE 5 (72s - 90s)
+      tl.set("#scene5", { autoAlpha: 1 }, 72.0);
+      tl.from("#scene5 .headline-main", { y: 40, opacity: 0, duration: 0.8, ease: "power3.out" }, 72.2);
+      tl.from("#scene5 .action-box", { scale: 0.88, opacity: 0, stagger: 0.15, duration: 0.6, ease: "back.out(1.3)" }, 72.5);
+      tl.from("#scene5 .outro-box", { scale: 0.85, opacity: 0, duration: 0.8, ease: "back.out(1.4)" }, 74.0);
+      tl.from("#scene5 .cta-button", { y: 20, opacity: 0, duration: 0.6, ease: "power2.out" }, 74.6);
+
+      // Avatar Equalizer Bar Animation
+      tl.to(".audio-bars .bar", { scaleY: 1.8, yoyo: true, repeat: 90, stagger: 0.1, duration: 0.4, ease: "sine.inOut" }, 0.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

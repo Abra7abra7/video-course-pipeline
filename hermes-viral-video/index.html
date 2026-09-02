@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="sk" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #04060c;
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+      }
+
+      .canvas {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: radial-gradient(
+            circle at 50% 10%,
+            rgba(239, 68, 68, 0.35) 0%,
+            transparent 65%
+          ),
+          radial-gradient(
+            circle at 85% 85%,
+            rgba(99, 102, 241, 0.3) 0%,
+            transparent 55%
+          ),
+          #04060c;
+        overflow: hidden;
+      }
+
+      .grid-pattern {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 50px 50px;
+        pointer-events: none;
+      }
+
+      /* Top Viral Pill */
+      .top-pill {
+        position: absolute;
+        top: 75px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(239, 68, 68, 0.55);
+        padding: 14px 36px;
+        border-radius: 999px;
+        backdrop-filter: blur(18px);
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fca5a5;
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+        z-index: 50;
+      }
+
+      .pulse-red {
+        width: 14px;
+        height: 14px;
+        background: #ef4444;
+        border-radius: 50%;
+        box-shadow: 0 0 18px #ef4444;
+      }
+
+      /* Scenes */
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 90px 50px;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .headline-viral {
+        font-family: "Outfit", sans-serif;
+        font-size: 74px;
+        font-weight: 900;
+        line-height: 1.06;
+        text-align: center;
+        background: linear-gradient(135deg, #ffffff 40%, #fca5a5 75%, #ef4444 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 16px;
+        letter-spacing: -1px;
+      }
+
+      .sub-viral {
+        font-size: 28px;
+        color: #cbd5e1;
+        text-align: center;
+        max-width: 880px;
+        line-height: 1.35;
+        margin-bottom: 30px;
+      }
+
+      /* Warning Flash Card */
+      .warning-box {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(185, 28, 28, 0.35));
+        border: 2px solid rgba(239, 68, 68, 0.6);
+        border-radius: 30px;
+        padding: 34px 40px;
+        width: 920px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        box-shadow: 0 0 45px rgba(239, 68, 68, 0.4);
+      }
+
+      .warning-icon {
+        font-size: 54px;
+      }
+
+      .warning-text h3 {
+        font-family: "Outfit", sans-serif;
+        font-size: 34px;
+        font-weight: 900;
+        color: #fef2f2;
+      }
+
+      .warning-text p {
+        font-size: 22px;
+        color: #fca5a5;
+        margin-top: 4px;
+      }
+
+      /* Mockup Window */
+      .window-viral {
+        position: relative;
+        width: 920px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 35px 70px rgba(0, 0, 0, 0.75),
+          0 0 45px rgba(99, 102, 241, 0.25);
+        backdrop-filter: blur(20px);
+      }
+
+      .window-top {
+        height: 52px;
+        background: rgba(30, 41, 59, 0.75);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+      }
+
+      .dots {
+        display: flex;
+        gap: 10px;
+      }
+
+      .d { width: 14px; height: 14px; border-radius: 50%; }
+      .d.r { background: #ef4444; }
+      .d.y { background: #f59e0b; }
+      .d.g { background: #10b981; }
+
+      .w-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #94a3b8;
+      }
+
+      .w-img {
+        width: 100%;
+        height: 480px;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* 5 Pillars Quick Stacks */
+      .pillars-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        width: 920px;
+      }
+
+      .pillar-card {
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 22px;
+        padding: 22px 26px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .p-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+      }
+
+      .p-text h4 {
+        font-family: "Outfit", sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+
+      .p-text p {
+        font-size: 17px;
+        color: #94a3b8;
+        margin-top: 2px;
+      }
+
+      /* Interactive Code Terminal */
+      .terminal-box {
+        background: #02040a;
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 26px;
+        padding: 30px;
+        width: 920px;
+        font-family: "JetBrains Mono", monospace;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+      }
+
+      .term-line {
+        font-size: 24px;
+        color: #38bdf8;
+        margin-bottom: 12px;
+      }
+
+      .term-highlight {
+        color: #34d399;
+        font-weight: 700;
+      }
+
+      /* Big Viral Comment Trigger Box */
+      .comment-cta-box {
+        background: linear-gradient(
+          135deg,
+          rgba(239, 68, 68, 0.3) 0%,
+          rgba(99, 102, 241, 0.35) 100%
+        );
+        border: 2px solid rgba(239, 68, 68, 0.6);
+        border-radius: 36px;
+        padding: 60px 40px;
+        text-align: center;
+        width: 920px;
+        box-shadow: 0 0 70px rgba(239, 68, 68, 0.4);
+      }
+
+      .comment-tag {
+        display: inline-block;
+        font-family: "Outfit", sans-serif;
+        font-size: 60px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #facc15, #f59e0b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding: 10px 30px;
+        border: 2px dashed rgba(250, 204, 21, 0.6);
+        border-radius: 20px;
+        margin: 20px 0;
+        text-shadow: 0 0 25px rgba(250, 204, 21, 0.5);
+      }
+
+      /* Kinetic Captions Pill (Hormozi Style) */
+      .hormozi-caption {
+        position: absolute;
+        bottom: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.85);
+        border: 2px solid rgba(250, 204, 21, 0.7);
+        padding: 16px 36px;
+        border-radius: 24px;
+        font-family: "Outfit", sans-serif;
+        font-size: 32px;
+        font-weight: 900;
+        color: #facc15;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.8), 0 0 30px rgba(250, 204, 21, 0.4);
+        z-index: 55;
+        text-align: center;
+        max-width: 900px;
+      }
+
+      /* Talking Avatar Widget */
+      .avatar-widget {
+        position: absolute;
+        bottom: 60px;
+        right: 60px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1.5px solid rgba(239, 68, 68, 0.55);
+        padding: 14px 24px 14px 16px;
+        border-radius: 999px;
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(239, 68, 68, 0.3);
+        z-index: 60;
+      }
+
+      .avatar-circle {
+        position: relative;
+        width: 86px;
+        height: 86px;
+        border-radius: 50%;
+        border: 3px solid #ef4444;
+        background: linear-gradient(135deg, #450a0a, #7f1d1d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .avatar-face {
+        font-size: 50px;
+        user-select: none;
+      }
+
+      .avatar-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .avatar-name {
+        font-family: "Outfit", sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: #f8fafc;
+      }
+
+      .avatar-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fca5a5;
+      }
+
+      .audio-bars {
+        display: flex;
+        gap: 3px;
+        align-items: flex-end;
+        height: 14px;
+      }
+
+      .bar {
+        width: 3px;
+        background: #ef4444;
+        border-radius: 2px;
+      }
+
+      .footer-note {
+        position: absolute;
+        bottom: 80px;
+        left: 60px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #94a3b8;
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      class="canvas"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="41"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div class="grid-pattern"></div>
+
+      <!-- Top Pill -->
+      <div class="top-pill">
+        <div class="pulse-red"></div>
+        <span>AI AGENT MASTERCLASS</span>
+      </div>
+
+      <!-- Kinetic Captions Pill (Hormozi / MrBeast Style) -->
+      <div id="kineticCap" class="hormozi-caption">
+        PRESTAŇTE POUŽÍVAŤ CHATGPT! 🚫
+      </div>
+
+      <!-- SCENE 1 (0s - 8s): VIRAL HOOK & WARNING -->
+      <div id="scene1" class="scene">
+        <div class="warning-box">
+          <span class="warning-icon">⚠️</span>
+          <div class="warning-text">
+            <h3>Prestaňte kódovať s ChatGPT!</h3>
+            <p>Existuje autonómny open-source agent, ktorý sa učí sám.</p>
+          </div>
+        </div>
+
+        <h1 class="headline-viral">HERMES AGENT</h1>
+        <p class="sub-viral">
+          Nous Research: Systém s uzavretým učiacim sa cyklom
+        </p>
+
+        <div class="window-viral">
+          <div class="window-top">
+            <div class="dots">
+              <span class="d r"></span>
+              <span class="d y"></span>
+              <span class="d g"></span>
+            </div>
+            <span class="w-title">Hermes Agent — Autonomous Workspace</span>
+            <span style="font-size: 16px; color: #10b981">● Self-Improving</span>
+          </div>
+          <img class="w-img" src="assets/hermes_ui.jpg" alt="Hermes UI" />
+        </div>
+      </div>
+
+      <!-- SCENE 2 (8s - 19s): 5 BRUTÁLNYCH PILIEROV -->
+      <div id="scene2" class="scene">
+        <h2 class="headline-viral">5 HLAVNÝCH PILIEROV</h2>
+        <p class="sub-viral">
+          Kompletná architektúra novej generácie agentov
+        </p>
+
+        <div class="pillars-grid">
+          <div id="pk1" class="pillar-card">
+            <div class="p-icon" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">🎭</div>
+            <div class="p-text">
+              <h4>1. Soul</h4>
+              <p>Osobnosť a hranice</p>
+            </div>
+          </div>
+
+          <div id="pk2" class="pillar-card">
+            <div class="p-icon" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">🧠</div>
+            <div class="p-text">
+              <h4>2. Memory</h4>
+              <p>Trvalá pamäť</p>
+            </div>
+          </div>
+
+          <div id="pk3" class="pillar-card">
+            <div class="p-icon" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">⚡</div>
+            <div class="p-text">
+              <h4>3. Skills</h4>
+              <p>Učenie receptov</p>
+            </div>
+          </div>
+
+          <div id="pk4" class="pillar-card">
+            <div class="p-icon" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">🛠️</div>
+            <div class="p-text">
+              <h4>4. Tools</h4>
+              <p>40+ systémových toolov</p>
+            </div>
+          </div>
+
+          <div id="pk5" class="pillar-card" style="grid-column: span 2;">
+            <div class="p-icon" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">🌐</div>
+            <div class="p-text">
+              <h4>5. Cron + Gateway</h4>
+              <p>Plánovanie a pripojenie na Telegram, Discord a Slack</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 3 (19s - 29s): AUTO-LEARNING & SKILLS -->
+      <div id="scene3" class="scene">
+        <h2 class="headline-viral">AUTONÓMNE UČENIE</h2>
+        <p class="sub-viral">
+          Po každej úlohe si sám vygeneruje nový skill
+        </p>
+
+        <div class="terminal-box">
+          <div class="term-line">&gt; Task completed: <span class="term-highlight">SUCCESS</span></div>
+          <div class="term-line">&gt; Generating skill: <span style="color: #facc15;">skills/crypto-analyzer/SKILL.md</span></div>
+          <div class="term-line">&gt; Updating memory: <span style="color: #a78bfa;">~/.hermes/memories/USER.md</span></div>
+          <div class="term-line">&gt; Status: <span class="term-highlight">● Self-Improvement Cycle Closed</span></div>
+        </div>
+      </div>
+
+      <!-- SCENE 4 (29s - 41s): VIRAL COMMENT CTA & SEAMLESS LOOP -->
+      <div id="scene4" class="scene">
+        <div class="comment-cta-box">
+          <h2 style="font-family: 'Outfit'; font-size: 48px; font-weight: 900; color: #ffffff;">
+            CHCETE CELÝ NÁVOD ZADARMO?
+          </h2>
+          <p style="font-size: 26px; color: #cbd5e1; margin-top: 10px;">
+            Napíšte do komentára slovo:
+          </p>
+          <div class="comment-tag">
+            💬 AGENT
+          </div>
+          <p style="font-size: 24px; color: #fca5a5; font-weight: 700;">
+            A pošlem vám kompletnú šablónu s konfiguračnými súbormi!
+          </p>
+        </div>
+      </div>
+
+      <!-- TALKING AVATAR WIDGET -->
+      <div class="avatar-widget">
+        <div class="avatar-circle">
+          <div class="avatar-face">👨‍💻</div>
+        </div>
+        <div class="avatar-info">
+          <span class="avatar-name">AI Automatizácia</span>
+          <div class="avatar-status">
+            <div class="audio-bars">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+            <span>Slovenský hlas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Voiceover Audio Clip -->
+      <audio
+        id="voiceover"
+        class="clip"
+        data-start="0"
+        data-duration="40.3"
+        src="assets/voiceover.mp3"
+      ></audio>
+
+      <!-- Footer Branding -->
+      <div class="footer-note">
+        NOUS RESEARCH × HERMES AGENT
+      </div>
+    </div>
+
+    <!-- GSAP Master Timeline (Seek-Safe & Paused) -->
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // KINETIC CAPTIONS TIMELINE SYNC (Hormozi Style)
+      const captions = [
+        { t: 0.0, text: "PRESTAŇTE POUŽÍVAŤ CHATGPT! 🚫" },
+        { t: 3.5, text: "HERMES AGENT: NOUS RESEARCH 🧠" },
+        { t: 7.5, text: "5 BRUTÁLNYCH PILIEROV ⚡" },
+        { t: 11.0, text: "SOUL • MEMORY • SKILLS 🎭" },
+        { t: 14.5, text: "40+ NÁSTROJOV & GATEWAY 🛠️" },
+        { t: 19.0, text: "AUTONÓMNE UČENIE SKILLOV 📈" },
+        { t: 25.0, text: "CUSTOMIZÁCIA CEZ SOUL.MD ⚙️" },
+        { t: 29.5, text: "NAPÍŠ 'AGENT' DO KOMENTÁRA! 💬" },
+        { t: 37.0, text: "A PRESNE PRETO BY STE MALI... 🔁" }
+      ];
+
+      captions.forEach(c => {
+        tl.call(() => {
+          const cap = document.getElementById("kineticCap");
+          if (cap) cap.innerText = c.text;
+        }, null, c.t);
+      });
+
+      // SCENE 1 (0s - 7.5s): Viral Hook
+      tl.set("#scene1", { autoAlpha: 1 }, 0);
+      tl.from("#scene1 .warning-box", { scale: 0.85, opacity: 0, duration: 0.6, ease: "back.out(1.4)" }, 0.1);
+      tl.from("#scene1 .headline-viral", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.4);
+      tl.from("#scene1 .window-viral", { scale: 0.9, opacity: 0, duration: 0.7, ease: "power3.out" }, 0.6);
+      tl.to("#scene1", { autoAlpha: 0, y: -40, duration: 0.4, ease: "power2.in" }, 7.0);
+
+      // SCENE 2 (7.5s - 18.5s): 5 Pillars
+      tl.set("#scene2", { autoAlpha: 1 }, 7.5);
+      tl.from("#scene2 .headline-viral", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 7.6);
+      tl.from("#pk1", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.4)" }, 8.0);
+      tl.from("#pk2", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.4)" }, 9.5);
+      tl.from("#pk3", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.4)" }, 11.0);
+      tl.from("#pk4", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.4)" }, 12.5);
+      tl.from("#pk5", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.4)" }, 14.0);
+      tl.to("#scene2", { autoAlpha: 0, y: -40, duration: 0.4, ease: "power2.in" }, 18.0);
+
+      // SCENE 3 (18.5s - 28.5s): Auto-Learning & Terminal
+      tl.set("#scene3", { autoAlpha: 1 }, 18.5);
+      tl.from("#scene3 .headline-viral", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 18.6);
+      tl.from("#scene3 .terminal-box", { scale: 0.9, opacity: 0, duration: 0.7, ease: "back.out(1.3)" }, 18.8);
+      tl.to("#scene3", { autoAlpha: 0, y: -40, duration: 0.4, ease: "power2.in" }, 28.0);
+
+      // SCENE 4 (28.5s - 41.0s): Comment Hook & Loop
+      tl.set("#scene4", { autoAlpha: 1 }, 28.5);
+      tl.from("#scene4 .comment-cta-box", { scale: 0.85, opacity: 0, duration: 0.7, ease: "back.out(1.4)" }, 28.6);
+      tl.from("#scene4 .comment-tag", { scale: 1.15, yoyo: true, repeat: 10, duration: 0.5, ease: "sine.inOut" }, 29.5);
+
+      // Avatar Equalizer Bar Animation
+      tl.to(".audio-bars .bar", { scaleY: 1.8, yoyo: true, repeat: 41, stagger: 0.1, duration: 0.4, ease: "sine.inOut" }, 0.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

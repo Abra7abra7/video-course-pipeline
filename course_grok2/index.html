@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grok 2 • Multi-Agent Architektúra & Kognitívny Runtime | Marian Stančík</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #04060a;
+      --bg-surface: #0b0f19;
+      --bg-card: rgba(15, 21, 35, 0.85);
+      --bg-card-hover: rgba(24, 33, 54, 0.95);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.5);
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.45);
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.22), transparent 45%),
+                  radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.18), transparent 45%),
+                  radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05), transparent 60%),
+                  var(--bg-dark);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(24px);
+      background: rgba(4, 6, 10, 0.85);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #c7d2fe;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .pulse-dot {
+      width: 9px;
+      height: 9px;
+      background: #06b6d4;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #06b6d4;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 370px 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1150px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .course-meta h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-top: 0.75rem;
+      background: linear-gradient(135deg, #ffffff 30%, #c7d2fe 80%, #67e8f9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .author-tag {
+      margin-top: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .author-tag span {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .progress-bar-container {
+      margin-top: 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
+      height: 100%;
+      width: 16%;
+      transition: width 0.3s ease;
+    }
+
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .lesson-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 0.85rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lesson-item:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(4px);
+    }
+
+    .lesson-item.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .lesson-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .lesson-item.active .lesson-number {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .lesson-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .lesson-item-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lesson-status {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+    }
+
+    /* Main Area */
+    .main-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Video Viewport */
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #030509;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(99, 102, 241, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .video-ambient-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 15%, rgba(99, 102, 241, 0.3) 0%, transparent 60%),
+                  radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.2) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Video Header */
+    .video-top-bar {
+      position: relative;
+      z-index: 20;
+      padding: 1.25rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(3, 5, 9, 0.95), transparent);
+    }
+
+    .video-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .voice-speaker-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #34d399;
+    }
+
+    .audio-equalizer {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 14px;
+    }
+    .eq-bar {
+      width: 3px;
+      background: #34d399;
+      border-radius: 2px;
+      height: 4px;
+      transition: height 0.08s ease;
+    }
+
+    /* Scene Arena */
+    .scene-arena {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 3rem;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .scene-view {
+      position: absolute;
+      inset: 0;
+      padding: 1rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.98);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scene-view.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .scene-tag {
+      display: inline-block;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: #67e8f9;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .scene-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.6rem, 3.2vw, 2.7rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+      background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      max-width: 900px;
+    }
+
+    .scene-desc {
+      font-size: clamp(0.9rem, 1.4vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 800px;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    .scene-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      max-width: 950px;
+      margin-top: 0.5rem;
+    }
+
+    .scene-box {
+      background: rgba(18, 24, 38, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.2rem 1rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .scene-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .box-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .box-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .box-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .stat-hero {
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.2), rgba(18, 24, 38, 0.9));
+      border: 2px solid rgba(99, 102, 241, 0.5);
+      border-radius: 1.5rem;
+      padding: 1.5rem 3rem;
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+      display: inline-block;
+    }
+
+    .stat-val {
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 900;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1;
+      text-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+    }
+
+    /* REAL-TIME SPEAKING AI AVATAR WIDGET */
+    .avatar-bubble-widget {
+      position: absolute;
+      bottom: 75px;
+      right: 35px;
+      z-index: 35;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .avatar-glow-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary) 0%, var(--accent-cyan) 60%, transparent 80%);
+      filter: blur(10px);
+      opacity: 0.5;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .avatar-face-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 3.5px solid #6366f1;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9), 0 0 25px rgba(99, 102, 241, 0.4);
+      background: #000;
+      transition: transform 0.15s ease-out;
+    }
+
+    .avatar-video-elem {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+
+    /* Animated Lip-Sync Canvas Layer */
+    .avatar-lips-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .avatar-live-badge {
+      position: relative;
+      margin-top: -12px;
+      background: rgba(10, 15, 30, 0.95);
+      border: 1px solid rgba(99, 102, 241, 0.5);
+      color: #e0e7ff;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      white-space: nowrap;
+    }
+
+    .speaking-indicator {
+      width: 7px;
+      height: 7px;
+      background: #34d399;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #34d399;
+    }
+
+    /* Big Play Overlay */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(4, 6, 11, 0.75);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .play-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .big-play-btn {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #4338ca);
+      border: none;
+      color: #fff;
+      font-size: 2.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 45px var(--primary-glow);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-bottom: 1rem;
+    }
+
+    .big-play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 65px var(--primary);
+    }
+
+    /* Live Subtitles */
+    .kinetic-caption-container {
+      position: relative;
+      z-index: 20;
+      background: rgba(8, 12, 22, 0.9);
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+    }
+
+    .caption-pill {
+      font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      padding: 0.35rem 1.2rem;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Player Controls */
+    .player-controls-bar {
+      position: relative;
+      z-index: 20;
+      background: rgba(4, 6, 11, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+
+    .control-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .control-btn-play {
+      background: var(--primary);
+      border-color: var(--primary);
+      width: 46px;
+      height: 46px;
+      font-size: 1.2rem;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .time-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      min-width: 90px;
+    }
+
+    .scrubber-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .scrubber-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
+      border-radius: 3px;
+    }
+
+    .speed-select-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .speed-select-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* Interactive Architecture Explorer Section */
+    .arch-explorer-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .arch-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .arch-tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .arch-tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .arch-content-panel {
+      background: rgba(6, 9, 16, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .json-key { color: #38bdf8; }
+    .json-str { color: #a5b4fc; }
+    .json-num { color: #34d399; }
+    .json-bool { color: #f59e0b; }
+
+    /* Transcript Card */
+    .transcript-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .transcript-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .transcript-content {
+      line-height: 1.8;
+      font-size: 1.02rem;
+      color: #e2e8f0;
+      white-space: pre-line;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.95rem;
+      border-radius: 0.6rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-action:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <div class="badge-header">
+        <span class="pulse-dot"></span>
+        Grok 2 Kognitívny Runtime
+      </div>
+      <div style="font-weight: 800; font-size: 1.15rem; color: #fff;">Multi-Agent Architektúra</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <a href="KURZ_GROK2_ARCHITEKTURA.md" target="_blank" class="btn-action">📖 Sylabus & Dokumentácia</a>
+      <a href="audio/full_course_grok2.mp3" download class="btn-action" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399;">🎧 Celý kurz (1 MP3)</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="card course-meta">
+        <div class="badge-header">Deep-Dive • 6 Lekcií</div>
+        <h1>Grok 2: Multi-Agent Architektúra</h1>
+        <div class="author-tag">
+          Lektor: <span>Marian Stančík</span>
+        </div>
+        
+        <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted);">
+          <span>Postup kurzu</span>
+          <span id="progress-text">1 / 6 lekcií</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="lesson-list" id="lesson-list">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Section -->
+    <main class="main-section">
+
+      <!-- Action Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-weight: 800; font-size: 1.25rem;" id="header-lesson-title">Lekcia 1: Grok 2 a Evolúcia Agentic Systémov</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn-action" onclick="toggleFullscreen()">⛶ Celá obrazovka</button>
+          <a id="btn-download-mp3" href="#" download class="btn-action">⬇ Stiahnuť MP3</a>
+        </div>
+      </div>
+
+      <!-- ANIMATED 16:9 VIDEO VIEWPORT -->
+      <div class="video-viewport" id="video-viewport">
+        <div class="grid-lines"></div>
+        <div class="video-ambient-glow"></div>
+
+        <!-- Big Play Click Overlay -->
+        <div class="play-overlay" id="play-overlay" onclick="togglePlay()">
+          <button class="big-play-btn" id="big-play-btn">▶</button>
+          <div style="font-size: 1.35rem; font-weight: 800; color: #fff;">Spustiť Grok 2 Video Lekciu</div>
+          <div style="font-size: 0.95rem; color: var(--text-muted); margin-top: 6px;">Hlasový výklad: Marian Stančík • Real-Time AI Lip-Sync Avatar</div>
+        </div>
+
+        <!-- Top Bar inside Video -->
+        <div class="video-top-bar">
+          <div class="video-badge" id="video-lesson-badge">
+            <span class="pulse-dot"></span>
+            Lekcia 1 z 6
+          </div>
+
+          <div class="voice-speaker-badge">
+            <div class="audio-equalizer" id="equalizer">
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+              <span class="eq-bar"></span>
+            </div>
+            <span>Marian Stančík • ElevenLabs AI Voice</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Scene Arena -->
+        <div class="scene-arena" id="scene-arena">
+          <!-- Scenes injected dynamically via JS -->
+        </div>
+
+        <!-- REAL-TIME SPEAKING AI AVATAR WIDGET -->
+        <div class="avatar-bubble-widget" id="avatar-bubble">
+          <div class="avatar-glow-ring" id="avatar-glow"></div>
+          <div class="avatar-face-container" id="avatar-face">
+            <video id="avatar-video" src="assets/heygen_avatar.mp4" poster="assets/heygen_avatar.jpg" loop playsinline muted class="avatar-video-elem"></video>
+          </div>
+          <div class="avatar-live-badge">
+            <span class="speaking-indicator" id="speaking-dot"></span> Marian Stančík • AI Twin
+          </div>
+        </div>
+
+        <!-- Live Subtitles Banner -->
+        <div class="kinetic-caption-container">
+          <div class="caption-pill" id="kinetic-caption">
+            Grok 2: Kognitívny Agentic Runtime
+          </div>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="player-controls-bar">
+          <button class="control-btn" onclick="prevLesson()" title="Predchádzajúca lekcia">⏮</button>
+          <button class="control-btn" onclick="seekRelative(-10)" title="Dozadu 10s">↺ 10</button>
+          <button class="control-btn control-btn-play" id="btn-play-toggle" onclick="togglePlay()">▶</button>
+          <button class="control-btn" onclick="seekRelative(10)" title="Dopredu 10s">10 ↻</button>
+          <button class="control-btn" onclick="nextLesson()" title="Ďalšia lekcia">⏭</button>
+
+          <span class="time-label" id="time-code">0:00 / 0:00</span>
+
+          <div class="scrubber-track" id="scrubber-track" onclick="handleScrub(event)">
+            <div class="scrubber-fill" id="scrubber-fill"></div>
+          </div>
+
+          <button class="speed-select-btn" id="speed-btn" onclick="cycleSpeed()">1.0x</button>
+        </div>
+
+        <audio id="audio-engine" preload="auto"></audio>
+      </div>
+
+      <!-- INTERACTIVE ARCHITECTURE EXPLORER -->
+      <div class="arch-explorer-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800;">🔬 Interaktívny Architektonický Inšpektor (Grok 2 Kernel)</h3>
+          <span style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 700;">Live Module Simulator</span>
+        </div>
+
+        <div class="arch-tabs">
+          <button class="arch-tab-btn active" onclick="showArchTab(0)">1. Dual-Brain Router</button>
+          <button class="arch-tab-btn" onclick="showArchTab(1)">2. Tool Execution Bus</button>
+          <button class="arch-tab-btn" onclick="showArchTab(2)">3. Teach a Task AST</button>
+          <button class="arch-tab-btn" onclick="showArchTab(3)">4. Swarm P2P Mesh</button>
+          <button class="arch-tab-btn" onclick="showArchTab(4)">5. Zero-Trust RBAC</button>
+        </div>
+
+        <div class="arch-content-panel" id="arch-panel">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Transcript Card -->
+      <div class="transcript-card">
+        <div class="transcript-header">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase;">Študijný prepis</div>
+            <h2 style="font-size: 1.25rem; font-weight: 800;" id="transcript-title">Grok 2 a Evolúcia Agentic Systémov</h2>
+          </div>
+          <button class="btn-action" id="btn-copy-text" onclick="copyTranscript()">📋 Kopírovať text</button>
+        </div>
+        <div class="transcript-content" id="transcript-text">
+          <!-- Text rendered via JS -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    const LESSONS_GROK2 = [
+      {
+        id: 1,
+        title: "Grok 2 a Evolúcia Agentic Systémov",
+        audioSrc: "audio/lekcia_01_grok2_evolucia.mp3",
+        duration: 32.18,
+        scenes: [
+          {
+            start: 0,
+            end: 11,
+            tag: "Nová Éra AI",
+            title: "Grok 2: Kognitívny Operačný Systém",
+            desc: "Prechod od bežného textového LLM ku kompletnému runtime prostrediu.",
+            caption: "Grok 2 nepredstavuje len väčší jazykový model...",
+            boxes: [
+              { icon: "🧠", title: "Reasoning Kernel", desc: "Viacúrovňový logický procesor" },
+              { icon: "⚡", title: "Agentic Runtime", desc: "Trvalý beh na cloudovom stroji" },
+              { icon: "🛠️", title: "System Access", desc: "Plnohodnotný Bash, Browser & Pamäť" }
+            ]
+          },
+          {
+            start: 11,
+            end: 22,
+            tag: "Porovnanie",
+            title: "Model vs. Agentic Runtime",
+            desc: "Klasický model len predpovedá tokeny. Grok 2 vykonáva perzistentné akcie.",
+            caption: "Rozdiel medzi bežným LLM a agentic runtime je zásadný...",
+            boxes: [
+              { icon: "❌", title: "Bežný LLM", desc: "Bezstavový, izolovaný od operačného systému" },
+              { icon: "🚀", title: "Grok 2 Kernel", desc: "Priame volanie systémových utilít a API" },
+              { icon: "💾", title: "Izolovaná Pamäť", desc: "Perzistentná epizodická a vektorová pamäť" }
+            ]
+          },
+          {
+            start: 22,
+            end: 33,
+            tag: "Základ architektúry",
+            title: "Perzistentné Cloudové Jadro",
+            desc: "Agent funguje nonstop v izolovanom Linux sandboxe s trvalou kontinuitou.",
+            caption: "Grok 2 beží v perzistentnom virtuálnom prostredí 24/7...",
+            heroStat: { val: "24/7", label: "Autonómny perzistentný cyklus" }
+          }
+        ],
+        text: `Vitaj v pokročilom kurze Grok 2. Dnes sa pozrieme pod kapotu novej generácie autonómnych agentov od xAI. Grok 2 nepredstavuje len väčší jazykový model s lepším reasoningom. Je to kompletný operačný systém pre umelú inteligenciu. Rozdiel medzi bežným LLM a agentic runtime je zásadný: model len predpovedá tokeny, zatiaľ čo Grok 2 beží v perzistentnom virtuálnom prostredí, má prístup k systémovému bashu, browseru a izolovanému pamäťovému modulu. Poďme sa pozrieť, ako funguje jadro tohto systému.`
+      },
+      {
+        id: 2,
+        title: "Hĺbková Architektúra: Dual-Brain a Router",
+        audioSrc: "audio/lekcia_02_dual_brain_architektura.mp3",
+        duration: 34.74,
+        scenes: [
+          {
+            start: 0,
+            end: 12,
+            tag: "Architektúra Jadra",
+            title: "Dual-Brain Kernel",
+            desc: "Fast Reasoning Kernel + Meta-Controller (Chief of Staff).",
+            caption: "Srdcom Grok 2 agenta je architektúra Dual-Brain...",
+            boxes: [
+              { icon: "⚡", title: "Fast Kernel", desc: "Mikrosekundové reflexívne odpovede" },
+              { icon: "👑", title: "Chief of Staff", desc: "Meta-Controller & plánovač úloh" },
+              { icon: "🔀", title: "Semantic Router", desc: "Analýza komplexity a rozdelenie" }
+            ]
+          },
+          {
+            start: 12,
+            end: 24,
+            tag: "Rozklad úloh",
+            title: "Hierarchický Strom Podúloh",
+            desc: "Zložité výpočty a viac-krokové workflows rozdelené do exekučného grafu.",
+            caption: "Zložité workflows rozdelí do stromu podúloh...",
+            boxes: [
+              { icon: "🌳", title: "DAG Execution", desc: "Paralelné vetvy podúloh" },
+              { icon: "🔍", title: "Vector DB", desc: "Sémantické vyhľadávanie vedomostí" },
+              { icon: "🧠", title: "Epizodická Pamäť", desc: "História rozhodnutí z minulosti" }
+            ]
+          },
+          {
+            start: 24,
+            end: 35,
+            tag: "Kontinuita",
+            title: "Nulová Strata Kontextu",
+            desc: "Dynamické kontextové okno prepájajúce dlhodobú pamäť s live session.",
+            caption: "Vďaka tomu agent nikdy nestráca kontext ani po týždňoch behu...",
+            heroStat: { val: "100%", label: "Dlhodobá pamäťová retencia" }
+          }
+        ],
+        text: `Srdcom Grok 2 agenta je architektúra Dual-Brain. Pozostáva z dvoch kľúčových komponentov: Fast Reasoning Kernel a Meta-Controller, známy ako Chief of Staff. Keď príde požiadavka, Router najprv analyzuje jej sémantickú komplexitu. Jednoduché úlohy vybaví priamo v mikrosekundách. Zložité výpočty a viac-krokové workflows rozdelí do stromu podúloh. Tento strom je riadený dynamickým kontextovým oknom, ktoré prepája vektorovú databázu s dlhodobou epizodickou pamäťou. Vďaka tomu agent nikdy nestráca kontext ani po týždňoch behu.`
+      },
+      {
+        id: 3,
+        title: "Tool Execution Bus a Sandboxing",
+        audioSrc: "audio/lekcia_03_tool_bus_sandboxing.mp3",
+        duration: 34.88,
+        scenes: [
+          {
+            start: 0,
+            end: 12,
+            tag: "Determinizmus",
+            title: "Tool Execution Bus",
+            desc: "Štruktúrované JSON príkazy eliminujúce halucinácie modelu.",
+            caption: "Ako Grok 2 vykonáva akcie bez toho, aby halucinoval?...",
+            boxes: [
+              { icon: "📦", title: "JSON RPC", desc: "Typovo bezpečné volanie nástrojov" },
+              { icon: "🛡️", title: "Linux Sandbox", desc: "Izolované bezpečné prostredie" },
+              { icon: "🌐", title: "Headless Chrome", desc: "Plná automatizácia webu" }
+            ]
+          },
+          {
+            start: 12,
+            end: 24,
+            tag: "Uzavretý cyklus",
+            title: "Validácia & Error-Handling",
+            desc: "Každá systémová akcia je validovaná pred návratom do kontextu agenta.",
+            caption: "Každá akcia prebehne v reálnom čase a výstup sa validuje...",
+            boxes: [
+              { icon: "⚙️", title: "Real-Time Exec", desc: "Okamžité spustenie príkazu" },
+              { icon: "⚠️", title: "Auto-Catch", desc: "Zachytenie runtime chýb" },
+              { icon: "🔁", title: "Self-Correction", desc: "Automatická oprava syntaxu" }
+            ]
+          },
+          {
+            start: 24,
+            end: 35,
+            tag: "Presnosť",
+            title: "99% Deterministická Presnosť",
+            desc: "Uzavretý spätnoväzbový cyklus zaručuje spoľahlivé vykonanie bez zlyhania.",
+            caption: "Tento uzavretý cyklus zaručuje 99-percentnú presnosť...",
+            heroStat: { val: "99.2%", label: "Úspešnosť deterministických akcií" }
+          }
+        ],
+        text: `Ako Grok 2 vykonáva akcie bez toho, aby halucinoval? Kľúčom je Tool Execution Bus. Namiesto toho, aby model len vymýšľal odpovede, posiela štruktúrované JSON príkazy do zabezpečeného sandboxu. Sandbox obsahuje plnohodnotný Linux terminál, headless prehliadač Chromium a API adaptéry pre Gmail, Slack či GitHub. Každá akcia prebehne v reálnom čase, výstup sa validuje cez error-handling modul a až overený výsledok sa vracia do mozgu agenta. Tento uzavretý cyklus zaručuje 99-percentnú deterministickú presnosť.`
+      },
+      {
+        id: 4,
+        title: "Teach a Task 2.0 a Kompilácia Skillov",
+        audioSrc: "audio/lekcia_04_teach_task_kompilacia.mp3",
+        duration: 34.32,
+        scenes: [
+          {
+            start: 0,
+            end: 12,
+            tag: "Vizuálne Učenie",
+            title: "Teach a Task 2.0",
+            desc: "Multimodálny parser analyzuje nahrávku obrazovky a DOM štruktúru.",
+            caption: "Grok 2 neukladá len pixely, analyzuje kliknutia a DOM...",
+            boxes: [
+              { icon: "👁️", title: "Vision AST", desc: "Rozpoznanie UI prvkov a vstupov" },
+              { icon: "🖱️", title: "Event Stream", desc: "Záznam kliknutí a klávesov" },
+              { icon: "📄", title: "DOM Mapper", desc: "Presné CSS/XPath selektory" }
+            ]
+          },
+          {
+            start: 12,
+            end: 23,
+            tag: "Kompilácia",
+            title: "Kompilácia do Python Kódu",
+            desc: "Záznam sa skompiluje do čistého optimalizovaného Python skriptu.",
+            caption: "Tento záznam následne skompiluje do čistého Python skriptu...",
+            boxes: [
+              { icon: "🐍", title: "Python Code", desc: "Čistý deterministický kód" },
+              { icon: "📦", title: "API Endpoint", desc: "Okamžite volateľný webhook" },
+              { icon: "⏰", title: "Cron Trigger", desc: "Plánované spúšťanie v cloude" }
+            ]
+          },
+          {
+            start: 23,
+            end: 35,
+            tag: "Verzovanie",
+            title: "Trvalý Verzovaný Skill",
+            desc: "Jednorazová ukážka sa stane trvalým modulom v knižnici agenta.",
+            caption: "Z jednorazovej ukážky sa stane trvalý verzovaný skill...",
+            heroStat: { val: "SKILL", label: "Automaticky skompilovaný mikromodul" }
+          }
+        ],
+        text: `V štvrtej lekcii sa pozrieme na najinovatívnejšiu technológiu Grok 2: Teach a Task 2.0. Keď nahráš obrazovku so svojím pracovným postupom, Grok 2 neukladá len pixely. Multimodálny parser analyzuje kliknutia myšou, klávesové skratky a DOM štruktúru webu. Tento vizuálny záznam následne skompiluje do čistého, optimalizovaného Python skriptu. Z jednorazovej ukážky sa stane trvalý, verzovaný skill s vlastným API endpointom, ktorý sa automaticky spúšťa cez cron alebo webhooky.`
+      },
+      {
+        id: 5,
+        title: "Multi-Agent Swarm Protocol a P2P Komunikácia",
+        audioSrc: "audio/lekcia_05_swarm_protocol_p2p.mp3",
+        duration: 32.46,
+        scenes: [
+          {
+            start: 0,
+            end: 11,
+            tag: "Škálovateľnosť",
+            title: "Swarm Protocol & P2P",
+            desc: "Distribuovaná zbernica pre priamu komunikáciu medzi špecialistami.",
+            caption: "Grok 2 využíva Swarm Protocol na koordináciu tímu...",
+            boxes: [
+              { icon: "📬", title: "Inbox Bot", desc: "Spracovanie prichádzajúcej pošty" },
+              { icon: "🔍", title: "Research Bot", desc: "Prieskum a zhromažďovanie dát" },
+              { icon: "✍️", title: "Content Bot", desc: "Generovanie výstupov a správ" }
+            ]
+          },
+          {
+            start: 11,
+            end: 22,
+            tag: "Handoff Tokeny",
+            title: "Stavové Handoff Tokeny",
+            desc: "Priame odovzdanie stavu medzi agentmi bez zaťažovania hlavného orchestrátora.",
+            caption: "Vygeneruje stavový handoff token a priamo zobudí ďalšieho bota...",
+            boxes: [
+              { icon: "🎫", title: "State Token", desc: "Kompaktný stav úlohy" },
+              { icon: "⚡", title: "Event Wakeup", desc: "Okamžitá reaktivácia bota" },
+              { icon: "🔄", title: "P2P Mesh", desc: "Paralelný tok dát" }
+            ]
+          },
+          {
+            start: 22,
+            end: 33,
+            tag: "Výkon",
+            title: "Extrémne Nízka Latencia",
+            desc: "Asynchrónny paralelný beh s minimálnou réžiou a maximálnou priepustnosťou.",
+            caption: "Synchronizácia prebieha asynchrónne na pozadí...",
+            heroStat: { val: "P2P", label: "Distribuovaná agentická sieť" }
+          }
+        ],
+        text: `Keď potrebuješ škálovať desiatky procesov naraz, jeden agent nestačí. Grok 2 využíva Swarm Protocol na koordináciu tímu špecialistov. Inbox bot, Calendar bot, Research bot a Code bot nečakajú na pokyny zhora. Komunikujú cez distribuovanú P2P zbernicu. Keď Research bot dokončí analýzu trhu, vygeneruje stavový handoff token a priamo zobudí Content bota. Synchronizácia prebieha asynchrónne na pozadí, čím dosahuje paralelizáciu práce a extrémne nízku latenciu.`
+      },
+      {
+        id: 6,
+        title: "Enterprise Guardrails a Bezpečnostný Zero-Trust Model",
+        audioSrc: "audio/lekcia_06_enterprise_guardrails.mp3",
+        duration: 30.74,
+        scenes: [
+          {
+            start: 0,
+            end: 10,
+            tag: "Podniková Bezpečnosť",
+            title: "Zero-Trust & RBAC Model",
+            desc: "Každý agent má striktne izolované oprávnenia podľa svojej roly.",
+            caption: "Grok 2 implementuje striktný Zero-Trust bezpečnostný model...",
+            boxes: [
+              { icon: "🛡️", title: "Zero-Trust", desc: "Overenie každej operácie" },
+              { icon: "👥", title: "RBAC Práva", desc: "Granulárne prístupové role" },
+              { icon: "📜", title: "Audit Trail", desc: "Kompletný kryptografický log" }
+            ]
+          },
+          {
+            start: 10,
+            end: 20,
+            tag: "3 Zóny",
+            title: "Trojzónový Bezpečnostný Model",
+            desc: "Zelená (autonómia), Oranžová (draft s notifikáciou), Červená (schválenie človekom).",
+            caption: "Zelená pre čítanie, oranžová pre draft, červená pre kritické akcie...",
+            boxes: [
+              { icon: "🟢", title: "Zelená zóna", desc: "Čítanie a interné spracovanie" },
+              { icon: "🟡", title: "Oranžová zóna", desc: "Draft s okamžitou notifikáciou" },
+              { icon: "🔴", title: "Červená zóna", desc: "Platba & Zmluvy: Schváli človek" }
+            ]
+          },
+          {
+            start: 20,
+            end: 31,
+            tag: "Záver",
+            title: "Nezastaviteľný Digitálny Tím",
+            desc: "Kombinácia autonómie a bezpečnosti pre skutočné nasadenie v praxi.",
+            caption: "Tlačidlo finálneho potvrdenia zostáva v rukách človeka...",
+            heroStat: { val: "TRUST", label: "Bezpečný Enterprise štandard" }
+          }
+        ],
+        text: `V poslednej lekcii si prejdeme to najdôležitejšie: ako celý systém bezpečne nasadiť v podniku. Grok 2 implementuje striktný Zero-Trust bezpečnostný model. Každý agent má presne definované RBAC práva. Zavádza sa princíp troch zón: zelená pre autonómne čítanie, oranžová pre draftovanie s notifikáciou a červená pre kritické akcie, ako je platba či odoslanie zmluvy. Tlačidlo finálneho potvrdenia zostáva vždy v rukách človeka. S týmto nastavením máte v rukách bezpečný a nezastaviteľný digitálny tím.`
+      }
+    ];
+
+    const ARCH_MODULES = [
+      {
+        title: "1. Dual-Brain Router (Meta-Controller)",
+        code: `// Grok 2 Dual-Brain Semantic Router
+{
+  "request_id": "req_8841a",
+  "input": "Analyzuj kvartálny report a priprav zhrnutie pre CEO",
+  "router_decision": {
+    "complexity": "HIGH_COMPOSITE",
+    "execution_tree": [
+      { "step": 1, "agent": "ResearchBot", "action": "parse_pdf", "timeout_ms": 2500 },
+      { "step": 2, "agent": "MetricsEngine", "action": "compute_ebitda", "depends_on": [1] },
+      { "step": 3, "agent": "ChiefOfStaff", "action": "synthesize_summary", "depends_on": [2] }
+    ],
+    "memory_context": {
+      "episodic_retrieval_k": 5,
+      "vector_cosine_threshold": 0.88
+    }
+  }
+}`
+      },
+      {
+        title: "2. Tool Execution Bus (Deterministický Sandbox)",
+        code: `// Tool Bus JSON-RPC Invocation
+{
+  "jsonrpc": "2.0",
+  "method": "sandbox.execute",
+  "params": {
+    "runtime": "linux_container",
+    "command": "python3 -c \\"import pandas as pd; df=pd.read_csv('data.csv'); print(df.describe())\\"",
+    "timeout_sec": 10,
+    "security_profile": "STRICT_SANDBOX_NO_NET"
+  },
+  "response": {
+    "status": "SUCCESS",
+    "exit_code": 0,
+    "validated_schema": true,
+    "duration_ms": 142
+  }
+}`
+      },
+      {
+        title: "3. Teach a Task 2.0 (AST Compiler)",
+        code: `// Compiled Skill Definition from Screen Recording
+class InvoiceProcessorSkill(SkillBase):
+    """Auto-compiled by Grok 2 Vision Parser"""
+    @skill_entry(version="2.1.0", timeout=30)
+    async def run(self, ctx: ExecutionContext):
+        doc = await ctx.browser.find_element(xpath="//div[@data-invoice]")
+        amount = await doc.extract_currency(regex=r"\\d+\\.\\d{2}")
+        if amount > 1000:
+            return ctx.guardrail.request_human_approval(amount=amount)
+        return await ctx.tools.accounting.post_entry(amount=amount)`
+      },
+      {
+        title: "4. Swarm P2P Protocol (Handoff Token)",
+        code: `// Distributed Swarm State Handoff
+{
+  "handoff_token": "tok_sw_990141f",
+  "from_agent": "ResearchBot_01",
+  "to_agent": "ContentBot_04",
+  "protocol": "P2P_EVENT_BUS",
+  "payload": {
+    "state_hash": "sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+    "verified_facts": 18,
+    "next_action": "generate_article_draft"
+  },
+  "latency_ms": 12
+}`
+      },
+      {
+        title: "5. Zero-Trust Security & RBAC Guardrails",
+        code: `// Enterprise Zero-Trust Permission Matrix
+{
+  "agent_id": "InboxManager_01",
+  "rbac_role": "DRAFT_ONLY",
+  "zones": {
+    "GREEN": ["gmail.read", "calendar.list", "slack.read_channels"],
+    "ORANGE": ["gmail.create_draft", "slack.post_ephemeral"],
+    "RED_BLOCKED": ["gmail.send_message", "stripe.charge", "github.push_main"]
+  },
+  "human_in_the_loop": {
+    "require_approval_for": "RED_BLOCKED",
+    "auth_method": "BIOMETRIC_PUSH_NOTIFICATION"
+  }
+}`
+      }
+    ];
+
+    let currentLessonIdx = 0;
+    let currentSceneIdx = -1;
+    const audio = document.getElementById('audio-engine');
+    const playOverlay = document.getElementById('play-overlay');
+    const btnPlayToggle = document.getElementById('btn-play-toggle');
+    const timeCodeEl = document.getElementById('time-code');
+    const scrubberFill = document.getElementById('scrubber-fill');
+    const scrubberTrack = document.getElementById('scrubber-track');
+    const kineticCaption = document.getElementById('kinetic-caption');
+    const sceneArena = document.getElementById('scene-arena');
+    const speedBtn = document.getElementById('speed-btn');
+    const eqBars = document.querySelectorAll('.eq-bar');
+    const avatarGlow = document.getElementById('avatar-glow');
+    const avatarFace = document.getElementById('avatar-face');
+    const avatarVideo = document.getElementById('avatar-video');
+    const speakingDot = document.getElementById('speaking-dot');
+
+    const speeds = [1.0, 1.25, 1.5, 2.0];
+    let speedIdx = 0;
+
+    // Web Audio API Context & Analyser
+    let audioCtx = null;
+    let analyser = null;
+    let sourceNode = null;
+    let dataArray = null;
+    let useSimulatedAudio = false;
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 256;
+          sourceNode = audioCtx.createMediaElementSource(audio);
+          sourceNode.connect(analyser);
+          analyser.connect(audioCtx.destination);
+          dataArray = new Uint8Array(analyser.frequencyBinCount);
+          useSimulatedAudio = false;
+        } catch (e) {
+          useSimulatedAudio = true;
+          analyser = null;
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // REAL-TIME AVATAR VIDEO & GLOW ANIMATION LOOP
+    function animateAvatar() {
+      requestAnimationFrame(animateAvatar);
+
+      let loudness = 0;
+      if (analyser && !audio.paused && !useSimulatedAudio) {
+        try {
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i];
+          }
+          loudness = sum / (dataArray.length * 255);
+        } catch (e) {
+          useSimulatedAudio = true;
+        }
+      } else if (!audio.paused) {
+        const t = audio.currentTime;
+        const syllable = Math.sin(t * 14) * 0.5 + 0.5;
+        const wordPause = Math.sin(t * 3.5) > -0.2 ? 1 : 0.08;
+        loudness = Math.max(0, syllable * wordPause * 0.7);
+      }
+
+      if (avatarGlow) {
+        const glowScale = 1 + loudness * 0.25;
+        const glowOpacity = 0.35 + loudness * 0.65;
+        avatarGlow.style.transform = `scale(${glowScale})`;
+        avatarGlow.style.opacity = glowOpacity;
+      }
+
+      if (speakingDot) {
+        if (!audio.paused && loudness > 0.05) {
+          speakingDot.style.background = '#34d399';
+          speakingDot.style.boxShadow = '0 0 10px #34d399';
+        } else {
+          speakingDot.style.background = '#64748b';
+          speakingDot.style.boxShadow = 'none';
+        }
+      }
+    }
+    animateAvatar();
+
+    function formatTime(s) {
+      if (isNaN(s)) return "0:00";
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    function renderLessonList() {
+      const listEl = document.getElementById('lesson-list');
+      listEl.innerHTML = '';
+      LESSONS_GROK2.forEach((l, idx) => {
+        const item = document.createElement('div');
+        item.className = `lesson-item ${idx === currentLessonIdx ? 'active' : ''}`;
+        item.innerHTML = `
+          <div class="lesson-number">${l.id}</div>
+          <div class="lesson-info">
+            <div class="lesson-item-title">${l.title}</div>
+            <div class="lesson-status">Lekcia ${l.id} • ${Math.ceil(l.duration)}s</div>
+          </div>
+        `;
+        item.onclick = () => selectLesson(idx, true);
+        listEl.appendChild(item);
+      });
+      document.getElementById('progress-fill').style.width = `${((currentLessonIdx + 1) / LESSONS_GROK2.length) * 100}%`;
+      document.getElementById('progress-text').innerText = `${currentLessonIdx + 1} / ${LESSONS_GROK2.length} lekcií`;
+    }
+
+    function buildSceneElements(lesson) {
+      sceneArena.innerHTML = '';
+      lesson.scenes.forEach((sc, i) => {
+        const el = document.createElement('div');
+        el.className = 'scene-view';
+        el.id = `scene-view-${i}`;
+
+        let boxesHtml = '';
+        if (sc.boxes && sc.boxes.length > 0) {
+          boxesHtml = `<div class="scene-grid">${sc.boxes.map(b => `
+            <div class="scene-box">
+              <div class="box-icon">${b.icon}</div>
+              <div class="box-title">${b.title}</div>
+              <div class="box-desc">${b.desc}</div>
+            </div>
+          `).join('')}</div>`;
+        }
+
+        let statHtml = '';
+        if (sc.heroStat) {
+          statHtml = `
+            <div class="stat-hero">
+              <div class="stat-val">${sc.heroStat.val}</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-top: 6px;">${sc.heroStat.label}</div>
+            </div>
+          `;
+        }
+
+        el.innerHTML = `
+          <div class="scene-tag">${sc.tag}</div>
+          <h2 class="scene-title">${sc.title}</h2>
+          <p class="scene-desc">${sc.desc}</p>
+          ${statHtml}
+          ${boxesHtml}
+        `;
+        sceneArena.appendChild(el);
+      });
+    }
+
+    function selectLesson(idx, autoStart = false) {
+      currentLessonIdx = idx;
+      currentSceneIdx = -1;
+      const lesson = LESSONS_GROK2[idx];
+
+      document.getElementById('header-lesson-title').innerText = `Lekcia ${lesson.id}: ${lesson.title}`;
+      document.getElementById('video-lesson-badge').innerText = `Lekcia ${lesson.id} z ${LESSONS_GROK2.length}`;
+      document.getElementById('transcript-title').innerText = lesson.title;
+      document.getElementById('transcript-text').innerText = lesson.text;
+      document.getElementById('btn-download-mp3').href = lesson.audioSrc;
+      document.getElementById('btn-download-mp3').download = lesson.audioSrc.split('/').pop();
+
+      buildSceneElements(lesson);
+      renderLessonList();
+
+      audio.src = lesson.audioSrc;
+      audio.load();
+
+      if (autoStart) {
+        initAudioContext();
+        playOverlay.classList.add('hidden');
+        audio.play().then(() => {
+          btnPlayToggle.innerText = '⏸';
+        }).catch(e => console.log('Playback blocked', e));
+      } else {
+        playOverlay.classList.remove('hidden');
+        btnPlayToggle.innerText = '▶';
+      }
+      updateSceneDisplay(0);
+    }
+
+    function updateSceneDisplay(currentTime) {
+      const lesson = LESSONS_GROK2[currentLessonIdx];
+      let activeIdx = 0;
+      for (let i = 0; i < lesson.scenes.length; i++) {
+        if (currentTime >= lesson.scenes[i].start && currentTime < lesson.scenes[i].end) {
+          activeIdx = i;
+          break;
+        }
+      }
+
+      if (activeIdx !== currentSceneIdx) {
+        currentSceneIdx = activeIdx;
+        const scene = lesson.scenes[activeIdx];
+        kineticCaption.innerText = scene.caption;
+
+        document.querySelectorAll('.scene-view').forEach((el, i) => {
+          if (i === activeIdx) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        });
+      }
+    }
+
+    // Audio Events
+    audio.ontimeupdate = () => {
+      const cur = audio.currentTime;
+      const dur = audio.duration || LESSONS_GROK2[currentLessonIdx].duration;
+      timeCodeEl.innerText = `${formatTime(cur)} / ${formatTime(dur)}`;
+      scrubberFill.style.width = `${(cur / dur) * 100}%`;
+      updateSceneDisplay(cur);
+
+      // Equalizer bars
+      if (!audio.paused) {
+        eqBars.forEach((bar, i) => {
+          const h = 4 + Math.sin(Date.now() / 120 + i) * 8 + Math.random() * 4;
+          bar.style.height = `${Math.max(3, h)}px`;
+        });
+      }
+    };
+
+    audio.onended = () => {
+      const avatarVid = document.getElementById('avatar-video');
+      if (avatarVid) avatarVid.pause();
+      if (currentLessonIdx < LESSONS_GROK2.length - 1) {
+        selectLesson(currentLessonIdx + 1, true);
+      } else {
+        btnPlayToggle.innerText = '▶';
+        playOverlay.classList.remove('hidden');
+      }
+    };
+
+    function togglePlay() {
+      initAudioContext();
+      const avatarVid = document.getElementById('avatar-video');
+      if (audio.paused) {
+        audio.play().then(() => {
+          btnPlayToggle.innerText = '⏸';
+          playOverlay.classList.add('hidden');
+          if (avatarVid) avatarVid.play().catch(e => console.log('Avatar video autoplay handled', e));
+        }).catch(e => console.error(e));
+      } else {
+        audio.pause();
+        btnPlayToggle.innerText = '▶';
+        playOverlay.classList.remove('hidden');
+        if (avatarVid) avatarVid.pause();
+      }
+    }
+
+    function handleScrub(e) {
+      const rect = scrubberTrack.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = pct * (audio.duration || LESSONS_GROK2[currentLessonIdx].duration);
+    }
+
+    function seekRelative(delta) {
+      audio.currentTime = Math.max(0, Math.min(audio.duration || 100, audio.currentTime + delta));
+    }
+
+    function prevLesson() {
+      if (currentLessonIdx > 0) selectLesson(currentLessonIdx - 1, true);
+    }
+
+    function nextLesson() {
+      if (currentLessonIdx < LESSONS_GROK2.length - 1) selectLesson(currentLessonIdx + 1, true);
+    }
+
+    function cycleSpeed() {
+      speedIdx = (speedIdx + 1) % speeds.length;
+      const s = speeds[speedIdx];
+      audio.playbackRate = s;
+      speedBtn.innerText = `${s.toFixed(2).replace('.00', '.0')}x`;
+    }
+
+    function toggleFullscreen() {
+      const elem = document.getElementById('video-viewport');
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => alert(`Chyba celej obrazovky: ${err.message}`));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function copyTranscript() {
+      navigator.clipboard.writeText(LESSONS_GROK2[currentLessonIdx].text);
+      const btn = document.getElementById('btn-copy-text');
+      btn.innerText = '✅ Skopírované!';
+      setTimeout(() => btn.innerText = '📋 Kopírovať text', 2000);
+    }
+
+    // Architecture Explorer Tabs
+    function showArchTab(index) {
+      document.querySelectorAll('.arch-tab-btn').forEach((btn, i) => {
+        if (i === index) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      const mod = ARCH_MODULES[index];
+      const panel = document.getElementById('arch-panel');
+      panel.innerHTML = `
+        <div style="font-weight: 800; color: #fff; margin-bottom: 0.75rem; font-size: 1rem;">${mod.title}</div>
+        <pre style="white-space: pre-wrap; word-break: break-all; color: #cbd5e1;">${mod.code}</pre>
+      `;
+    }
+
+    // Init
+    selectLesson(0, false);
+    showArchTab(0);
+  </script>
+</body>
+</html>
