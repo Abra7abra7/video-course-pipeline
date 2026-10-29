@@ -1,3 +1,74 @@
+# AGENTS.md — Video Course Pipeline
+
+Instructions for any coding agent (Jules, OpenCode, Hermes, Grok Bot, Claude, Codex, …). Read the **Agent quick guide** first; the detailed Slovak manual follows below it.
+
+## Agent quick guide
+
+### Project
+
+- **Purpose:** Marián Stančík's automated "video factory" — course portals, AI voice-over (ElevenLabs), HeyGen avatar, and multi-format exports (16:9, 9:16, 1:1) for YouTube, TikTok, Reels, Instagram and LinkedIn.
+- **Owner:** Marián Stančík (GitHub `Abra7abra7`). Content is published on his own channels; client videos (e.g. `apodex-goldie-video/`) belong to the respective client. TODO: confirm client ownership per video folder.
+- **No hosting / no preview deploy** — outputs are local files.
+
+### Stack
+
+- Python 3 scripts (`pipeline.py`, `voice_engine.py`, `generate_*.py`, `render_course_videos.py`, `export_all_platforms.py`, `build_animated_lessons.py`). No `requirements.txt` — TODO: confirm Python dependencies (and ffmpeg for exports).
+- Node: root `package.json` only has `puppeteer-core` (used by `capture_scenes.mjs`).
+- Each `*-video/` folder is a **HyperFrames** project with its own `AGENTS.md`/`CLAUDE.md` — follow those inside that folder.
+
+### Commands
+
+```bash
+python pipeline.py --action export --input <video.mp4> --name <name>   # 16:9 + 9:16 + 1:1 into exports/
+python pipeline.py --action voice --text "<text>" --name <name>        # ElevenLabs voice-over (paid API!)
+python pipeline.py --action sync-avatar --target course_grok2          # copy HeyGen avatar into a course
+python -m http.server 8080                                             # preview course portals locally
+# inside a HyperFrames folder, e.g. hermes-viral-video/:
+npm run dev | npm run check | npm run render
+```
+
+There is **no test suite**. Minimum check: the script you touched runs on a small sample, `npm run check` passes in any HyperFrames folder you changed, and the course portal loads locally.
+
+### Structure
+
+```
+pipeline.py, voice_engine.py, *.py     # pipeline scripts
+course_grok_bot/, course_grok2/        # finished course portals (index.html, audio/, videos/)
+*-video/                               # HyperFrames video projects (one per video)
+exports/                               # rendered MP4s
+archive/                               # legacy one-off scripts and data — read-only
+brand_config.json                      # brand settings
+.agents/skills/                        # hyperframes-cli, youtube-to-markdown skills
+```
+
+### Conventions & project-specific rules
+
+- Content and docs are **Slovak**; code identifiers English.
+- **Paid APIs (ElevenLabs, HeyGen):** do not generate voice/avatar output without explicit approval; env var names: `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`, `HEYGEN_API_KEY` (in `.env`, git-ignored).
+- Do not commit new large media (MP4/MP3/WAV renders) unless the task asks for it; never commit `__pycache__/` or `.pyc`.
+- Respect copyright of third-party source videos/transcripts; nothing is published without Marián's approval.
+
+### Working rules (mandatory for every agent: Jules, OpenCode, Hermes, Grok Bot, Claude, Codex, …)
+
+- **Branch + Pull Request only.** Create a feature branch (`feat/…`, `fix/…`, `docs/…`, `seo/…`), open a PR and wait for review. **Never push or force-push to `main`/the default branch** and never merge your own PR.
+- **No secrets in git.** Never commit `.env*`, API keys, tokens, passwords, private keys, server IP addresses, SSH details or personal data. Use the hosting platform's environment variables; reference variables by **name only**. If you find a secret in the repo, stop and report it — do not copy it anywhere.
+- **GDPR / privacy first.** Treat any personal data (leads, customers, patients, form submissions) as confidential. No new trackers, cookies, analytics, third-party scripts or data processors without explicit approval; keep privacy/cookie pages consistent with what the code actually does.
+- **The client owns the domain, the content and the data.** Do not change DNS, domains, hosting settings, payment settings, legal texts or published client content without explicit approval.
+- **No destructive changes without approval.** No deleting pages/data/files in bulk, no history rewrites, no dependency major-version upgrades, no production deploys, no outgoing emails/posts from tests.
+- **Invent nothing.** If a fact (price, company detail, legal statement, metric) is not in the repo or the task, leave a `TODO: confirm` instead of guessing.
+- **Small, focused diffs.** Reuse existing patterns and dependencies; do not add a new dependency if an existing one covers the need.
+
+### Definition of Done
+
+1. The changed scripts/projects run on a sample (see *Commands*); HyperFrames `npm run check` passes where relevant.
+2. No preview deploy exists for this repo — attach a short sample output description or screenshot in the PR instead.
+3. The PR description contains a summary, what was run, and any `TODO: confirm` items.
+4. Nothing is published until Marián approves (**ÁNO**) and merges the PR.
+
+---
+
+# Detailed manual (Slovak, original)
+
 # 🤖 AGENTS.md — Master Dokumentácia & Brand Manuál Automatickej Video Fabriky
 
 Vitaj v hlavnej dokumentácii automatizovanej fabriky na tvorbu kurzov, interaktívnych aplikácií a multi-platformových videí (YouTube, TikTok, Reels, Shorts, Instagram, LinkedIn).
